@@ -8,13 +8,13 @@ test.describe('perfil do colecionador', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Perfil do colecionador' })).toBeVisible()
   })
 
-  // Known bug: after saving, the field re-applies the stored value on top of what was
-  // typed ("Alice ColecionadoraAlice Neumann"). Documented in TASKS.md; the assertion
-  // stays here so the fix can flip this back to a normal test.
-  test.fixme('editar o nome de exibição persiste após recarregar', async ({ page }) => {
+  test('editar o nome de exibição persiste após recarregar', async ({ page }) => {
     const form = page.locator('form:visible').first()
     const field = form.getByLabel('Nome de exibição', { exact: false }).first()
     const updated = 'Alice Colecionadora'
+    // Wait for the query to prefill the field: typing before the profile arrives made
+    // the mock answer with a name glued to the stored one and looked like a code bug.
+    await expect(field).not.toHaveValue('')
     await field.fill(updated)
     const saved = page.waitForResponse(
       (response) => /\/api\/profile$/.test(response.url()) && response.request().method() === 'PATCH'
