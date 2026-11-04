@@ -14,19 +14,29 @@ export function CatalogTabs({ value, options, onChange, className }: CatalogTabs
   return (
     <Tabs value={value} onValueChange={onChange} className={cn(className)}>
       <TabsList variant="line" className="h-auto flex-wrap gap-x-5 gap-y-2 bg-transparent p-0">
-        {options.map((option) => (
-          <TabsTrigger
-            key={option.value}
-            value={option.value}
-            className={cn(
-              'text-canvas h-4 gap-0 p-0 text-[15px] leading-4 font-medium',
-              'data-[state=active]:text-highlight',
-              'after:bg-primary group-data-horizontal/tabs:after:bottom-[-6px] group-data-horizontal/tabs:after:h-0.5'
-            )}
-          >
-            {option.label}
-          </TabsTrigger>
-        ))}
+        {options.map((option) => {
+          const active = value === option.value
+          return (
+            <TabsTrigger
+              key={option.value}
+              value={option.value}
+              className={cn(
+                'text-canvas! relative h-4 gap-0 p-0 text-[15px] leading-4 font-medium whitespace-nowrap',
+                'data-[state=active]:text-highlight!'
+              )}
+            >
+              {option.label}
+              {/* Figma Toolbar/Tabs: linha de 2px em #D28A4C, 4px abaixo do texto. */}
+              <span
+                aria-hidden
+                className={cn(
+                  'absolute inset-x-0 -bottom-[6px] h-0.5',
+                  active ? 'bg-primary' : 'bg-transparent'
+                )}
+              />
+            </TabsTrigger>
+          )
+        })}
       </TabsList>
       {/* The grid below is the real panel; these keep each trigger's aria-controls valid. */}
       {options.map((option) => (
