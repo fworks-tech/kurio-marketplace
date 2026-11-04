@@ -134,9 +134,19 @@ export interface NftAttribute {
   value: string | number
 }
 
+/** Collector review of an NFT (mock contract extension documented in ARCHITECTURE) */
+export interface NftReview {
+  id: string
+  author: string
+  rating: number
+  date: string
+  text: string
+}
+
 /** Detailed NFT view - extends NftSummary with required stats */
 export interface NftDetail extends NftSummary {
   stats: NftStats
+  reviews?: NftReview[]
 }
 
 /** User profile summary */

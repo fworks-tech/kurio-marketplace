@@ -48,6 +48,7 @@ import {
   MAX_QUANTITY_PER_NFT
 } from '../state/mock-state'
 import { COLLECTION_LABELS, NETWORK_ORDER, nftAvailable, nftSoldOut } from '../fixtures/index'
+import { reviewsFor } from '../fixtures/reviews'
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const IDEMPOTENCY_KEY_PATTERN = /^[A-Za-z0-9_-]{8,128}$/
@@ -362,7 +363,11 @@ export const handlers = [
 
     return res(
       ctx.json<ApiResponse<NftDetail>>({
-        data: { ...nft, stats: nft.stats ?? { viewCount: 0, bidCount: 0, floorPrice: '0' } },
+        data: {
+          ...nft,
+          stats: nft.stats ?? { viewCount: 0, bidCount: 0, floorPrice: '0' },
+          reviews: reviewsFor(nft.id)
+        },
         meta: { page: 1, limit: 1, total: 1, totalPages: 1 },
         success: true,
         requestId: 'req-' + Date.now(),
