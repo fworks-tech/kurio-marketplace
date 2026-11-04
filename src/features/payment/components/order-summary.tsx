@@ -14,10 +14,14 @@ interface OrderSummaryProps {
   className?: string
 }
 
+/**
+ * Figma `Fees`: label 15/19.78 cream, values 18/16 cream, the "Taxa estimada" note in
+ * 12px orange under the fee, and the total in 18/16 bold orange without a separator.
+ */
 export function OrderSummary({
   subtotalEth,
   discountEth,
-  discountLabel = 'Desconto de lançamento',
+  discountLabel = 'Desconto do lançamento',
   networkFeeEth,
   totalEth,
   loading,
@@ -29,24 +33,40 @@ export function OrderSummary({
   }
 
   return (
-    <div
-      className={cn('space-y-3', className)}
-      aria-busy={Boolean(updating)}
-    >
+    <div className={cn('space-y-3', className)} aria-busy={Boolean(updating)}>
       {updating ? (
-        <p role="status" className="text-text-secondary text-xs">
+        <p role="status" className="text-highlight text-xs">
           Atualizando valores…
         </p>
       ) : null}
-      <TotalRow label="Subtotal" value={formatPrice(subtotalEth)} />
-      {discountEth ? (
-        <TotalRow label={discountLabel}>
-          <span className="text-success text-sm tabular-nums">-{formatPrice(discountEth)}</span>
-        </TotalRow>
+
+      <div className="flex items-baseline justify-between gap-4">
+        <span className="text-canvas text-[15px] leading-[19.8px]">Subtotal</span>
+        <span className="text-canvas text-lg leading-4 tabular-nums">{formatPrice(subtotalEth)}</span>
+      </div>
+
+      {discountEth !== undefined ? (
+        <div className="flex items-baseline justify-between gap-4">
+          <span className="text-canvas text-[15px] leading-[19.8px]">{discountLabel}</span>
+          <span className="text-canvas text-[15px] leading-[19.8px] tabular-nums">
+            (-) {formatPrice(discountEth)}
+          </span>
+        </div>
       ) : null}
-      <TotalRow label="Taxa de rede" value={formatPrice(networkFeeEth)} />
-      <p className="text-text-secondary text-xs">Taxa estimada da rede e pode variar na confirmação.</p>
-      <TotalRow label="Total" value={formatPrice(totalEth)} strong className="border-white/10 border-t pt-3" />
+
+      <div className="space-y-3">
+        <div className="flex items-baseline justify-between gap-4">
+          <span className="text-canvas text-[15px] leading-[19.8px]">Taxa de rede</span>
+          <span className="text-canvas text-lg leading-4 tabular-nums">{formatPrice(networkFeeEth)}</span>
+        </div>
+        <p className="text-highlight text-right text-xs leading-4">Taxa estimada</p>
+      </div>
+
+      <TotalRow
+        label="Total"
+        value={formatPrice(totalEth)}
+        className="pt-3 [&>span]:text-canvas [&>span]:text-base [&>span]:leading-4 [&>span]:font-bold [&>span:last-child]:text-highlight [&>span:last-child]:text-lg [&>span:last-child]:tabular-nums"
+      />
     </div>
   )
 }
