@@ -200,8 +200,18 @@ export function ItemDetailScreen({
 
         <div className="bg-surface-card relative -mx-6 mt-[-114px] px-6 pt-8 pb-7">
           <div className="flex items-start justify-between gap-4">
-            <h1 className="text-canvas min-w-0 flex-1 text-[20px] leading-4 font-bold">{nft.title}</h1>
-            <Rating average={average} count={reviews.length} />
+            <p
+              role="heading"
+              aria-level={1}
+              className="text-canvas shrink-0 text-[20px] leading-4 font-bold"
+            >
+              {nft.title}
+            </p>
+            <span className="bg-surface-card flex h-[27px] w-20 shrink-0 items-center justify-center gap-1 rounded-[8px]">
+              <StarIcon aria-hidden className="fill-primary text-primary size-[14px]" />
+              <span className="text-canvas text-sm leading-4 font-medium">{average.toFixed(1)}</span>
+              <span className="text-sand text-sm leading-4">({reviews.length})</span>
+            </span>
           </div>
           <p className="text-sand mt-3 line-clamp-4 text-sm leading-6">{nft.description}</p>
 
