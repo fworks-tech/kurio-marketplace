@@ -188,7 +188,7 @@ export function HomeHero() {
         </div>
       </div>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-[5px] flex justify-center lg:pointer-events-auto lg:static lg:mt-8 lg:justify-center lg:gap-4">
+      <div className="pointer-events-none absolute inset-x-0 bottom-[5px] flex items-center justify-center lg:pointer-events-auto lg:static lg:mt-8 lg:justify-center lg:gap-4">
         <button
           type="button"
           onClick={() => go(-1)}
