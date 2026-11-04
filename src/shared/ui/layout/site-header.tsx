@@ -48,7 +48,7 @@ export function SiteHeader({
         <Link
           to="/"
           data-brand
-          className="text-canvas flex h-[45px] items-center text-sm leading-[18px] font-bold tracking-[0.1em]"
+          className="text-canvas flex h-[45px] w-[160px] shrink-0 items-start pt-2 text-sm leading-[18px] font-bold tracking-[0.1em]"
         >
           KURIO
         </Link>
@@ -92,10 +92,14 @@ export function SiteHeader({
             <SearchIcon aria-hidden className="size-5" />
           </button>
 
-          <Link to="/cart" aria-label="Carrinho" className="text-canvas relative grid place-items-center">
-            <CartIcon aria-hidden className="size-5" />
+          <Link
+            to="/cart"
+            aria-label="Carrinho"
+            className="text-canvas relative flex h-6 w-[31px] shrink-0 items-start"
+          >
+            <CartIcon aria-hidden className="size-6" />
             {cartCount > 0 ? (
-              <span className="border-ink bg-primary text-ink absolute -top-2 -right-2 grid size-4 place-items-center rounded-full border-2 text-[10px] leading-none font-medium">
+              <span className="border-ink bg-primary text-ink absolute top-0 right-0 grid size-4 place-items-center rounded-full border-2 text-[10px] leading-none font-medium">
                 {cartCount}
               </span>
             ) : null}
