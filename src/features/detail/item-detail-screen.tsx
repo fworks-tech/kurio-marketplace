@@ -125,7 +125,7 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
   )
 
   return (
-    <main className="mx-auto max-w-[1248px] px-4 pt-8 pb-8 sm:px-6">
+    <main className="mx-auto max-w-[1248px] px-6 pt-8 pb-8">
       <nav aria-label="Trilha de navegação" className="text-canvas text-[15px] leading-4 font-bold">
         <Link to="/" className="hover:text-highlight">
           Início
@@ -141,7 +141,7 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
 
         <div className="flex flex-col justify-between gap-5">
           <div className="flex flex-col gap-3">
-            <h1 className="text-canvas text-[28px] leading-[37px] font-bold">{nft.title}</h1>
+            <h1 className="text-canvas text-[20px] leading-4 font-bold sm:text-[28px] sm:leading-[37px]">{nft.title}</h1>
             <div className="flex flex-wrap items-center justify-between gap-4">
               <p className="text-highlight text-[22px] leading-4 font-bold">{nft.price} ETH</p>
               <Rating average={average} count={reviews.length} />

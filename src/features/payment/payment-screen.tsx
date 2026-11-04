@@ -196,7 +196,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
 
   if (cart.isLoading || quote.isLoading) {
     return (
-      <main className="mx-auto max-w-[1248px] px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-[1248px] px-7 pt-8 pb-[132px] sm:px-6 lg:pb-8">
         <h1 className="sr-only">Pagamento</h1>
         <p className="text-text-secondary mt-2 text-sm">Preparando seu checkout…</p>
       </main>
@@ -205,7 +205,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
 
   if (items.length === 0) {
     return (
-      <main className="mx-auto max-w-[1248px] px-4 py-8 sm:px-6">
+      <main className="mx-auto max-w-[1248px] px-7 pt-8 pb-[132px] sm:px-6 lg:pb-8">
         <h1 className="sr-only">Pagamento</h1>
         <ErrorState message="Seu carrinho está vazio. Adicione um NFT antes de ir para o pagamento." />
       </main>
@@ -213,7 +213,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
   }
 
   return (
-    <main className="mx-auto max-w-[1248px] px-4 py-8 sm:px-6">
+    <main className="mx-auto max-w-[1248px] px-7 pt-8 pb-[132px] sm:px-6 lg:pb-8">
       <Breadcrumb
         items={[
           { label: 'Início', to: '/' },

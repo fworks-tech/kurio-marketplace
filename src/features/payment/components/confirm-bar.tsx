@@ -23,15 +23,19 @@ export function ConfirmBar({
   return (
     <div
       className={cn(
-        'border-border bg-ink/95 flex items-center justify-between gap-4 border-t px-4 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] lg:static',
+        'bg-ink/95 fixed inset-x-0 bottom-0 z-30 flex items-center justify-between gap-4 px-6 py-4 pb-[calc(1rem+env(safe-area-inset-bottom))] backdrop-blur lg:static lg:border-t lg:border-border lg:px-4 lg:py-3',
         className
       )}
     >
-      <div>
+      <div className="hidden lg:block">
         <p className="text-text-secondary text-xs">Total</p>
         <p className="text-lg font-bold tabular-nums">{formatPrice(totalEth)}</p>
       </div>
-      <Button size="lg" onClick={onConfirm} disabled={disabled || loading}>
+      <Button
+        onClick={onConfirm}
+        disabled={disabled || loading}
+        className="h-[60px] w-full rounded-[40px] text-[16px] font-bold lg:h-10 lg:w-auto lg:rounded-[8px] lg:text-sm"
+      >
         {loading ? 'Confirmando…' : actionLabel}
       </Button>
     </div>

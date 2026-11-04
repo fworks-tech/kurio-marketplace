@@ -15,7 +15,7 @@ export function AccountLayout({ sidebar, children, className }: AccountLayoutPro
   return (
     <main
       className={cn(
-        'mx-auto w-full max-w-[1200px] px-4 pt-6 pb-12 sm:px-6 lg:px-0',
+        'mx-auto w-full max-w-[1200px] px-6 pt-6 pb-12 lg:px-0',
         className
       )}
     >

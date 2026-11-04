@@ -54,7 +54,7 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
   }
 
   return (
-    <main className="mx-auto max-w-[1248px] px-4 py-8 sm:px-6">
+    <main className="mx-auto max-w-[1248px] px-7 py-8 sm:px-6">
       <Breadcrumb items={[{ label: 'Início', to: '/' }, { label: 'Mercado', to: '/' }, { label: 'Carrinho' }]} />
       <h1 className="sr-only">Carrinho de NFTs</h1>
       <div className="mt-4 grid gap-8 lg:grid-cols-[1fr_332px]">
@@ -132,7 +132,7 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
 
           <div className="space-y-3">
             <Button
-              className="h-10 w-full rounded-[3px] text-[15px] font-bold"
+              className="h-[60px] w-full rounded-[40px] text-[16px] font-bold sm:h-10 sm:rounded-[3px] sm:text-[15px]"
               disabled={!canCheckout}
               onClick={handleFinalize}
             >

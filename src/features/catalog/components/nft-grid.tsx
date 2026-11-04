@@ -5,7 +5,8 @@ import { NftCard } from './nft-card'
 import { NftCardSkeleton } from './nft-card-skeleton'
 import type { CatalogNft } from '../catalog-types'
 
-const GRID_CLASS = 'grid grid-cols-2 gap-x-8 gap-y-[72px] md:grid-cols-3'
+const GRID_CLASS =
+  'grid grid-cols-2 gap-x-4 gap-y-10 md:grid-cols-3 md:gap-x-8 md:gap-y-[72px] [&>*:nth-child(even)]:mt-8 md:[&>*:nth-child(even)]:mt-0'
 /** Five 219px cards with a 28px gutter — the related rails on detail/cart/payment. */
 const COMPACT_GRID_CLASS = 'grid grid-cols-2 gap-x-7 gap-y-8 sm:grid-cols-3 lg:grid-cols-5 lg:gap-x-[26px]'
 
