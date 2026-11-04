@@ -82,7 +82,8 @@ test.describe('baselines visuais', () => {
     test.skip(baselineMissing(testInfo, 'home-mobile'), 'sem baseline para esta plataforma')
 
     await page.goto('/')
-    await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO DO FUTURO/ })).toBeVisible()
+    // The mobile frame carries its own headline copy, so match the shared opening.
+    await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO/ })).toBeVisible()
     await expect(page.locator('article:has(.text-price)').first()).toBeVisible()
     await settle(page)
     await expect(page).toHaveScreenshot('home-mobile.png', { fullPage: true })
