@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { CatalogScreen } from '@/features/catalog/catalog-screen'
 import { useAuthDialog } from '@/features/auth/auth-dialog'
 import { HomeHero } from '@/features/catalog/components/home-hero'
+import { MobileCatalogBar } from '@/features/catalog/components/mobile-catalog-bar'
 import { HomePromos } from '@/features/catalog/components/home-promos'
 import { HomeBlog } from '@/features/catalog/components/home-blog'
 import { type CatalogState } from '@/features/catalog/catalog-queries'
@@ -86,8 +87,14 @@ function HomeRoute() {
 
   return (
     <main className="flex flex-col gap-16 pt-8 pb-8 sm:gap-24">
+      <MobileCatalogBar search={state.search} values={state} onChange={patch} />
       <HomeHero />
-      <CatalogScreen state={state} onPatch={patch} onRequireAuth={requireAuth} />
+      <CatalogScreen
+        state={state}
+        onPatch={patch}
+        onRequireAuth={requireAuth}
+        showMobileFilterTrigger={false}
+      />
       <HomePromos />
       <HomeBlog />
     </main>

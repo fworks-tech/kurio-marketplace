@@ -43,9 +43,16 @@ interface CatalogScreenProps {
   state: CatalogState
   onPatch: (patch: Partial<CatalogState>) => void
   onRequireAuth: () => void
+  /** False on Home, where the Figma search + filter row sits above the hero. */
+  showMobileFilterTrigger?: boolean
 }
 
-export function CatalogScreen({ state, onPatch, onRequireAuth }: CatalogScreenProps) {
+export function CatalogScreen({
+  state,
+  onPatch,
+  onRequireAuth,
+  showMobileFilterTrigger = true
+}: CatalogScreenProps) {
   const list = useNftList(toNftListParams(state))
   const facetQuery = useCatalogFacets()
   const { data: session } = useSession()
@@ -96,11 +103,12 @@ export function CatalogScreen({ state, onPatch, onRequireAuth }: CatalogScreenPr
     })
 
   return (
-    <section id="produtos" className="mx-auto w-full max-w-[1248px] px-4 sm:px-6">
+    <section id="produtos" className="mx-auto w-full max-w-[1248px] px-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:gap-12">
         <FilterSidebar
           facets={facets}
           bounds={bounds}
+          showMobileTrigger={showMobileFilterTrigger}
           values={{
             search: state.search,
             collection: state.collection,

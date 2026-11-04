@@ -4,7 +4,7 @@
  */
 export function HomeHero() {
   return (
-    <section className="mx-auto w-full max-w-[1248px] px-4 sm:px-6">
+    <section className="mx-auto w-full max-w-[1248px] px-6">
       <div className="relative flex flex-col items-start gap-8 overflow-hidden px-6 py-8 sm:px-8 lg:h-[450px] lg:flex-row lg:items-center lg:gap-[110px] lg:py-0 lg:pr-0 lg:pl-10">
         <div className="flex w-full flex-col gap-8 lg:w-[600px] lg:shrink-0">
           <div className="flex flex-col gap-1">

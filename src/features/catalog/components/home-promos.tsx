@@ -16,7 +16,7 @@ const PROMOS = [
 /** Home promo cards (Figma "Promos") — two side-by-side editorial banners. */
 export function HomePromos() {
   return (
-    <section className="mx-auto w-full max-w-[1248px] px-4 sm:px-6">
+    <section className="mx-auto w-full max-w-[1248px] px-6">
       <div className="flex flex-col gap-7 lg:flex-row">
         {PROMOS.map((promo) => (
           <article

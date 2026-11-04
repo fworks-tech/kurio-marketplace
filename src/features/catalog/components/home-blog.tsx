@@ -32,7 +32,7 @@ const POSTS = [
 /** Home blog strip (Figma "Blog" / "Diário da Cunhagem") — four editorial cards. */
 export function HomeBlog() {
   return (
-    <section className="mx-auto w-full max-w-[1248px] px-4 sm:px-6">
+    <section className="mx-auto w-full max-w-[1248px] px-6">
       <header className="flex flex-col items-center gap-3 text-center">
         <h2 className="text-canvas text-[28px] leading-9 font-bold">Diário da Cunhagem</h2>
         <p className="text-text-secondary text-sm leading-[18px]">
