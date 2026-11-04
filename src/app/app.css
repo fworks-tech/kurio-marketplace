@@ -413,6 +413,17 @@
     animation: kurio-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* Featured artwork breathes while idle: a slow 6px float, never a bounce. */
+  .kurio-float {
+    animation: kurio-float 4.8s ease-in-out infinite alternate;
+    will-change: transform;
+  }
+
+  .kurio-float:hover,
+  .kurio-float:focus-visible {
+    animation-play-state: paused;
+  }
+
   /* Toasts arrive from the right, matching their anchored position. */
   .kurio-toaster [data-sonner-toast][data-styled='true'] {
     animation: kurio-toast-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -438,5 +449,14 @@
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes kurio-float {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-6px);
   }
 }
