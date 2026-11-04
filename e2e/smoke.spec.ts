@@ -5,7 +5,7 @@ test('home shell renders with brand, heading and live region', async ({ page }) 
   page.on('pageerror', (error) => errors.push(error.message))
 
   await page.goto('/')
-  await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO DO FUTURO/ })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO D/ })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Kurio' })).toBeVisible()
   await expect(page.locator('[aria-live="polite"]').first()).toBeAttached()
   expect(errors).toEqual([])

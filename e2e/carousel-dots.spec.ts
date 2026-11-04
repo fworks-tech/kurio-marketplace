@@ -31,12 +31,14 @@ test.describe("controles de carrossel", () => {
 
     // Every slide shows a different artwork.
     const sources = await carousel
-      .locator("img")
+      .locator("img[data-hero-slide]")
       .evaluateAll((nodes) => nodes.map((node) => node.getAttribute("src")));
     expect(new Set(sources).size).toBe(sources.length);
   });
 
-  test("as setas e o teclado navegam o hero para os lados", async ({ page }) => {
+  test("as setas e o teclado navegam o hero para os lados", async ({ page }, testInfo) => {
+    // The Mobile / Início frame draws no arrows: swiping replaces them there.
+    test.skip(testInfo.project.name.includes("mobile") || testInfo.project.name.includes("tablet"));
     await page.goto("/");
     const dots = page
       .getByRole("group", { name: "Obras em destaque" })
