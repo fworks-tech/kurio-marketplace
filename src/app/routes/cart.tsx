@@ -11,7 +11,7 @@ function CartRoute() {
   const { data: session, isLoading } = useSession()
   const navigate = useNavigate()
   return (
-    <RequireAuth loading={isLoading} authenticated={Boolean(session)}>
+    <RequireAuth loading={isLoading} authenticated={Boolean(session)} landmark>
       <CartScreen
         authenticated={Boolean(session)}
         onCheckout={() => navigate({ to: '/payment' })}

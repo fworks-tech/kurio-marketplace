@@ -9,7 +9,6 @@ import { CouponField } from './components/coupon-field'
 import { OrderSummary } from '@/features/payment/components/order-summary'
 import { NftGrid } from '@/features/catalog/components/nft-grid'
 import { toCatalogNft, useNftList } from '@/features/catalog/catalog-queries'
-import { ApiError } from '@/shared/api/api-error'
 import {
   cartLineMax,
   useCart,
@@ -39,7 +38,6 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
     .slice(0, 4)
     .map(toCatalogNft)
 
-  const quoteUnavailable = quote.isError && quote.error instanceof ApiError && quote.error.status === 422
   const couponStatus = appliedCoupon
     ? quote.isError
       ? 'error'

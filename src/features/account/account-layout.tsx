@@ -13,7 +13,7 @@ interface AccountLayoutProps {
  */
 export function AccountLayout({ sidebar, children, className }: AccountLayoutProps) {
   return (
-    <div
+    <main
       className={cn(
         'mx-auto w-full max-w-[1200px] px-4 pt-6 pb-12 sm:px-6 lg:px-0',
         className
@@ -23,6 +23,6 @@ export function AccountLayout({ sidebar, children, className }: AccountLayoutPro
         {sidebar}
         <div className="min-w-0 flex-1">{children}</div>
       </div>
-    </div>
+    </main>
   )
 }
