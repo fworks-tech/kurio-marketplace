@@ -41,7 +41,7 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
 
   const quoteUnavailable = quote.isError && quote.error instanceof ApiError && quote.error.status === 422
   const couponStatus = appliedCoupon
-    ? quoteUnavailable || quote.isError
+    ? quote.isError
       ? 'error'
       : quote.isFetching
         ? 'idle'
@@ -114,7 +114,7 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
               onChange={setCouponInput}
               onApply={() => setAppliedCoupon(couponInput.trim() || undefined)}
               status={couponStatus}
-              message={quoteUnavailable ? 'Cupom inválido ou expirado.' : undefined}
+              message={quote.isError ? 'Cupom inválido ou expirado.' : undefined}
               appliedCode={couponStatus === 'applied' ? appliedCoupon : undefined}
               onRemove={() => {
                 setAppliedCoupon(undefined)
