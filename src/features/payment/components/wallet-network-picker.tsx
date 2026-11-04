@@ -5,7 +5,8 @@
  */
 
 
-export const WALLET_OPTIONS = ['MetaMask', 'Coinbase Wallet', 'WalletConnect'] as const
+// The frame lists WalletConnect first and the designer's comment #70 confirms it.
+export const WALLET_OPTIONS = ['WalletConnect', 'MetaMask', 'Coinbase Wallet'] as const
 
 export type WalletOption = (typeof WALLET_OPTIONS)[number]
 
@@ -34,7 +35,7 @@ export function WalletNetworkPicker({ value, onChange, className, connection }: 
   return (
     <div className={className}>
       <h2 className="text-[17px] leading-4 font-bold">Carteira e rede</h2>
-      <div className="mt-4 space-y-4" role="radiogroup" aria-label="Carteira e rede">
+      <div className="mt-5 space-y-4" role="radiogroup" aria-label="Carteira e rede">
         {WALLET_OPTIONS.map((option) => {
           const selected = option === value
           return (
@@ -45,20 +46,19 @@ export function WalletNetworkPicker({ value, onChange, className, connection }: 
               aria-checked={selected}
               onClick={() => onChange(option)}
               className={
-                'flex h-[45px] w-full items-center gap-3 rounded-[5px] border px-3 text-left text-[15px] leading-5 transition-colors ' +
+                'flex h-[45px] w-full items-center gap-3 rounded-[3px] border px-3 text-left text-[15px] leading-5 transition-colors ' +
                 (selected
-                  ? 'border-primary bg-primary/10 text-canvas'
-                  : 'border-white/10 text-canvas hover:border-primary/60')
+                  ? 'border-primary text-canvas'
+                  : 'border-field text-canvas hover:border-primary/60')
               }
             >
               <span
                 aria-hidden
                 className={
-                  'grid size-4 shrink-0 place-items-center rounded-full border ' +
-                  (selected ? 'border-primary' : 'border-white/30')
+                  'border-primary grid size-4 shrink-0 place-items-center rounded-full border'
                 }
               >
-                {selected ? <span className="bg-primary size-2 rounded-full" /> : null}
+                {selected ? <span className="bg-primary size-2.5 rounded-full" /> : null}
               </span>
               {option}
             </button>
