@@ -156,11 +156,6 @@
     rgba(210, 138, 76, 0.1) 0%,
     rgba(210, 138, 76, 0.03) 100%
   );
-  --gradient-art: linear-gradient(
-    143.28deg,
-    var(--color-surface-card) -12%,
-    var(--color-surface-raised) 106.59%
-  );
   --gradient-decor: linear-gradient(
     145.46deg,
     rgba(210, 138, 76, 0.3) -46.09%,
@@ -233,10 +228,6 @@
 /* Contextual gradient surfaces (FAB, soft panels, art tiles). */
 @utility bg-gradient-fab {
   background-image: var(--gradient-fab);
-}
-
-@utility bg-gradient-art {
-  background-image: var(--gradient-art);
 }
 
 @utility bg-gradient-panel-soft {
