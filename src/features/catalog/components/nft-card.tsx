@@ -126,7 +126,8 @@ export function NftCard({
 
       <h3
         className={cn(
-          'text-canvas mt-3 truncate font-normal',
+          'text-canvas truncate font-normal',
+          compact ? 'mt-2' : 'mt-3',
           compact ? 'text-[15px] leading-4' : 'text-base leading-4'
         )}
       >
