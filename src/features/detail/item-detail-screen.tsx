@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { HeartIcon, Link2Icon, MessageCircleIcon, StarIcon } from 'lucide-react'
+import { HeartIcon, Link2Icon, MessageCircleIcon, MinusIcon, PlusIcon, StarIcon } from 'lucide-react'
 import { notify } from '@/shared/ui/toast'
 import { ErrorState } from '@/shared/ui/error-state'
 import { Skeleton } from '@/shared/ui/skeleton'
@@ -173,27 +173,28 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="border-white/15 flex h-[50px] w-[103px] items-center justify-between rounded-[10px] border px-2">
+            {/* Figma Frame 48: dois botões de 33x50 em #D28A4C com borda #140D0A e o número em 20/28. */}
+            <div className="flex h-[50px] w-[103px] items-center justify-between">
               <button
                 type="button"
                 aria-label="Diminuir quantidade"
                 disabled={limits.atMin}
                 onClick={() => setQuantity(stepQuantity(quantity, -1, 1, Math.max(1, remaining)))}
-                className="text-canvas grid size-7 place-items-center disabled:opacity-40"
+                className="bg-primary text-ink border-ink grid h-[50px] w-[33px] place-items-center rounded-pill border disabled:opacity-40"
               >
-                −
+                <MinusIcon aria-hidden className="size-[15px]" />
               </button>
-              <span className="text-canvas text-[15px] tabular-nums">
-                {String(quantity).padStart(2, '0')}
+              <span className="text-canvas w-[13px] text-center text-[20px] leading-7 tabular-nums">
+                {quantity}
               </span>
               <button
                 type="button"
                 aria-label="Aumentar quantidade"
                 disabled={limits.atMax}
                 onClick={() => setQuantity(stepQuantity(quantity, 1, 1, Math.max(1, remaining)))}
-                className="text-canvas grid size-7 place-items-center disabled:opacity-40"
+                className="bg-primary text-ink border-ink grid h-[50px] w-[33px] place-items-center rounded-pill border disabled:opacity-40"
               >
-                +
+                <PlusIcon aria-hidden className="size-[15px]" />
               </button>
             </div>
 
