@@ -38,7 +38,7 @@ export function NftCard({
     'bg-ink/70 border-field text-canvas hover:text-highlight focus-visible:ring-highlight grid size-8 place-items-center rounded-full border backdrop-blur transition-colors focus-visible:ring-2 focus-visible:outline-none'
 
   return (
-    <article className={cn('group flex flex-col', className)}>
+    <article className={cn('kurio-card group flex flex-col', className)}>
       <div
         className={cn(
           'bg-surface-card relative rounded-[14px]',

@@ -367,3 +367,76 @@
     width: calc(100vw - 24px) !important;
   }
 }
+
+/*
+ * Motion layer: subtle, GPU-friendly transitions on interactive surfaces.
+ * Everything here is skipped when the visitor asks for reduced motion.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Cards lift a little and warm up their shadow on hover. */
+  .kurio-card {
+    transition:
+      transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 240ms ease,
+      background-color 240ms ease;
+  }
+
+  .kurio-card:hover,
+  .kurio-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px -24px rgb(0 0 0 / 0.85);
+  }
+
+  .kurio-card:active {
+    transform: translateY(-1px) scale(0.995);
+  }
+
+  /* Buttons and pill links free a short press feedback. */
+  .kurio-press {
+    transition:
+      transform 160ms ease,
+      filter 160ms ease,
+      background-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .kurio-press:active {
+    transform: scale(0.97);
+  }
+
+  /* Route content fades in instead of snapping. */
+  main {
+    animation: kurio-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  /* Toasts arrive from the right, matching their anchored position. */
+  .kurio-toaster [data-sonner-toast][data-styled='true'] {
+    animation: kurio-toast-in 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+}
+
+@keyframes kurio-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes kurio-toast-in {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
