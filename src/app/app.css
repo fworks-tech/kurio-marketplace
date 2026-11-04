@@ -1,0 +1,282 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/roboto-mono';
+@import 'tw-animate-css';
+
+/* Dark-only app: pin the `dark:` variant to the .dark class on <html> so the
+ * dark refinements inside the shadcn primitives render identically on every
+ * machine (not gated on the viewer's prefers-color-scheme). */
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Kurio design system — dark theme only.
+ * Single source of truth for every visual token. Screen and domain components
+ * consume semantic names (bg-surface-card, text-price, shadow-card …) or the
+ * shadcn/ui aliases (bg-background, bg-primary …) — never a raw hex.
+ * Palette, type, radii and sizes come from docs/tasks/frontend/01-design-system.md
+ * and were cross-checked against the Figma (see ARCHITECTURE.md).
+ */
+
+@theme {
+  /* ---- Raw Kurio palette (Figma) ---- */
+  --color-ink: #140d0a;
+  --color-canvas: #f5f1eb;
+  --color-primary: #d28a4c;
+  --color-sand: #b39463;
+  --color-highlight: #e89b55;
+  --color-coral: #f0805f;
+  --color-text-secondary: #cfb28c;
+  --color-surface-card: #241612;
+  --color-surface-raised: #2f1d15;
+  --color-surface-dark: #38220f;
+  --color-surface-deep: #18100c;
+  --color-field: #3f2319;
+  --color-muted-strong: #55321f;
+  --color-amber: #e3a44e;
+  --color-success: #00a66c;
+  --color-error: #ed1b2e;
+  --color-white: #ffffff;
+  --color-gray-light: #ededed;
+
+  /* ---- Domain surfaces (must live in @theme to generate utilities) ---- */
+  --color-price: var(--color-highlight);
+  --color-icon: var(--color-sand);
+  --color-border-soft: var(--color-muted-strong);
+
+  /* Brand marks are assets, not theme tokens (kept for the social buttons). */
+  --color-brand-google-blue: #4285f4;
+  --color-brand-google-red: #ea4335;
+  --color-brand-google-yellow: #fbbc05;
+  --color-brand-google-green: #34a853;
+  --color-brand-facebook: #3b5999;
+
+  /* ---- Foundation utilities (kept stable for the app shell) ---- */
+  --color-bg: var(--color-ink);
+  --color-text: var(--color-canvas);
+  --color-text-muted: var(--color-text-secondary);
+  --color-surface: var(--color-surface-card);
+  --color-skeleton: var(--color-surface-raised);
+  --color-skeleton-shine: var(--color-muted-strong);
+
+  /* ---- shadcn/ui semantic aliases -> Kurio ---- */
+  --color-background: var(--color-ink);
+  --color-foreground: var(--color-canvas);
+  --color-card: var(--color-surface-card);
+  --color-card-foreground: var(--color-canvas);
+  --color-popover: var(--color-surface-raised);
+  --color-popover-foreground: var(--color-canvas);
+  --color-primary-foreground: var(--color-ink);
+  --color-secondary: var(--color-surface-raised);
+  --color-secondary-foreground: var(--color-canvas);
+  --color-muted: var(--color-surface-card);
+  --color-muted-foreground: var(--color-text-secondary);
+  --color-accent: var(--color-surface-raised);
+  --color-accent-foreground: var(--color-highlight);
+  --color-destructive: var(--color-error);
+  --color-destructive-foreground: var(--color-white);
+  --color-border: var(--color-field);
+  --color-input: var(--color-field);
+  --color-ring: var(--color-primary);
+
+  /* ---- Typography (Roboto Mono, self-hosted, swap) ---- */
+  --font-sans: 'Roboto Mono Variable', 'Roboto Mono', ui-monospace, monospace;
+  --font-mono: 'Roboto Mono Variable', 'Roboto Mono', ui-monospace, monospace;
+
+  --text-display: 32px;
+  --text-display--line-height: 42px;
+  --text-display--letter-spacing: 0.1em;
+  --text-title: 20px;
+  --text-title--line-height: 28px;
+  --text-title-sm: 18px;
+  --text-title-sm--line-height: 25px;
+  --text-body: 16px;
+  --text-body--line-height: 24px;
+  --text-body-sm: 15px;
+  --text-body-sm--line-height: 22px;
+  --text-body-xs: 14px;
+  --text-body-xs--line-height: 20px;
+  --text-caption: 13px;
+  --text-caption--line-height: 18px;
+
+  /* ---- Radii (base ~6px per Figma; controls use rounded-md, surfaces rounded-lg) ---- */
+  --radius: 6px;
+  --radius-sm: 5px;
+  /* Form controls inside the account screens use the tighter 3px radius (Figma) */
+  --radius-field: 3px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 14px;
+  --radius-2xl: 24px;
+  --radius-social: 5px;
+  --radius-card: 14px;
+  --radius-row: 15px;
+  --radius-pill: 40px;
+  --radius-full: 9999px;
+
+  /* ---- Elevation: semantic shadow set, one per context (Figma) ---- */
+  --shadow-card: 0 6px 20px 0 rgba(10, 6, 4, 0.45);
+  --shadow-glow: 0 0 20px 0 rgba(10, 6, 4, 0.45);
+  --shadow-wallet: 0 20px 20px 0 rgba(10, 6, 4, 0.45);
+  --shadow-button: 0 4px 12px -2px rgba(20, 13, 10, 0.15);
+  --shadow-button-lg: 0 6.6px 19.8px -3.3px rgba(20, 13, 10, 0.15);
+  --shadow-tab-up: 0 -10px 30px 0 rgba(10, 6, 4, 0.45);
+  --shadow-option: 0 0 40px 0 rgba(10, 6, 4, 0.45);
+
+  /* ---- Motion ---- */
+  --animate-shimmer: shimmer 1.6s ease-in-out infinite;
+
+  @keyframes shimmer {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(100%);
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+
+  /* Named surfaces now live in @theme (see the domain surfaces block). */
+
+  /* Primary gradient (buy / payment-confirm CTAs). Flat primary elsewhere. */
+  --primary-gradient: linear-gradient(
+    93.21deg,
+    #d28a4c -3.96%,
+    rgba(210, 138, 76, 0.8) 121.97%
+  );
+  /* Contextual gradients: mobile FAB, soft panels, art tiles, decor. */
+  --gradient-fab: linear-gradient(
+    180deg,
+    rgba(210, 138, 76, 0.4) -16.92%,
+    var(--color-primary) 109.23%
+  );
+  --gradient-panel-soft: linear-gradient(
+    180deg,
+    rgba(210, 138, 76, 0.1) 0%,
+    rgba(210, 138, 76, 0.03) 100%
+  );
+  --gradient-art: linear-gradient(
+    143.28deg,
+    var(--color-surface-card) -12%,
+    var(--color-surface-raised) 106.59%
+  );
+  --gradient-decor: linear-gradient(
+    145.46deg,
+    rgba(210, 138, 76, 0.3) -46.09%,
+    rgba(210, 138, 76, 0) 103.28%
+  );
+
+  /* Control heights (spec): input 50, primary button 60, social 40, back 35,
+     option row 65, wallet card 93, badge circle 40. */
+  --size-input: 50px;
+  --size-btn: 60px;
+  --size-btn-social: 40px;
+  --size-back: 35px;
+  --size-option-row: 65px;
+  --size-wallet-card: 93px;
+  --size-badge: 40px;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+    outline-color: color-mix(in oklab, var(--color-ring) 50%, transparent);
+  }
+
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100dvh;
+  }
+
+  button,
+  [role='button'],
+  [role='radio'],
+  [role='tab'],
+  [role='switch'],
+  [role='slider'],
+  select,
+  summary,
+  input[type='checkbox'],
+  input[type='radio'] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [aria-disabled='true'],
+  input:disabled,
+  select:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* One consistent, always-visible keyboard focus ring: 2px primary + offset. */
+:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Primary gradient surface (buy / payment-confirm button). */
+@utility bg-primary-gradient {
+  background-image: var(--primary-gradient);
+}
+
+/* Contextual gradient surfaces (FAB, soft panels, art tiles). */
+@utility bg-gradient-fab {
+  background-image: var(--gradient-fab);
+}
+
+@utility bg-gradient-art {
+  background-image: var(--gradient-art);
+}
+
+@utility bg-gradient-panel-soft {
+  background-image: var(--gradient-panel-soft);
+}
+
+/* Skeleton + shimmer primitive: preserves layout dimensions while loading. */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--color-skeleton);
+  border-radius: var(--radius-sm);
+}
+
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-skeleton-shine),
+    transparent
+  );
+  animation: var(--animate-shimmer);
+}
+
+/* Honor reduced-motion: no shimmer, no sweeping background. */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton::after {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
