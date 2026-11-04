@@ -6,7 +6,7 @@ import { AccountSidebar } from '@/features/account/components/account-sidebar'
 import { AccountField, accountInputClass } from '@/features/account/components/account-field'
 import { AccountLayout } from '@/features/account/account-layout'
 import { useSession } from '@/features/session/session-queries'
-import { endSession } from '@/features/session/session-actions'
+import { useSignOut } from '@/features/session/use-sign-out'
 import { profileService, walletService } from '@/shared/services'
 import { ApiError } from '@/shared/api/api-error'
 import { queryKeys } from '@/shared/lib/query-client'
@@ -161,8 +161,9 @@ export function ProfileScreen() {
     reader.readAsDataURL(file)
   }
 
+  const signOut = useSignOut()
   const handleSignOut = () => {
-    void endSession()
+    signOut()
   }
 
   return (

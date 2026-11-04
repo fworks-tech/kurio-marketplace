@@ -5,7 +5,7 @@ import { SiteFooter } from '@/shared/ui/layout/site-footer'
 import { MobileTabBar } from '@/shared/ui/layout/mobile-tab-bar'
 import { AuthDialogProvider } from '@/features/auth/auth-dialog'
 import { useSession } from '@/features/session/session-queries'
-import { endSession } from '@/features/session/session-actions'
+import { useSignOut } from '@/features/session/use-sign-out'
 import { useCart } from '@/features/cart/cart-queries'
 import { useGuestCartCount, useMergeGuestCart } from '@/features/cart/use-guest-cart'
 
@@ -58,6 +58,7 @@ function RootLayout() {
   const { data: session } = useSession()
   const cart = useCart()
   const guestCount = useGuestCartCount()
+  const signOut = useSignOut()
   useMergeGuestCart()
   const chrome = headerChrome(pathname)
   const hideFooter = /^\/(profile|wallets)(\/|$)/.test(pathname)
@@ -71,7 +72,7 @@ function RootLayout() {
           accountLabel={session?.user.username ?? 'Conta'}
           active={chrome.active}
           divider={chrome.divider}
-          onSignOut={() => void endSession()}
+          onSignOut={signOut}
         />
         <div className="flex-1 pb-20 md:pb-0">
           <Outlet />

@@ -37,5 +37,8 @@ export const queryKeys = {
 }
 
 export function clearSessionCaches(): void {
-  queryClient.clear()
+  // Mounted observers (the header reads the session) keep their last data when the
+  // query is merely removed, so publish the signed-out state first.
+  queryClient.setQueryData(queryKeys.session, null)
+  queryClient.removeQueries({ predicate: (query) => query.queryKey[0] !== 'session' })
 }
