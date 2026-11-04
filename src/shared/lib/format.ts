@@ -58,6 +58,10 @@ export function shortAddress(address: string): string {
 }
 
 /** Token ids are drawn with a leading hash and are shown as-is. */
+/** `nft-289` → `#0289`, matching the four-digit token ids used in the designs. */
 export function formatTokenId(id: string): string {
+  const digits = id.match(/(\d+)\s*$/)?.[1]
+  if (digits) return `#${digits.padStart(4, '0')}`
+
   return id.startsWith('#') ? id : `#${id}`
 }

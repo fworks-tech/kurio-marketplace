@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { HeartIcon, Link2Icon, MessageCircleIcon, MinusIcon, PlusIcon, StarIcon } from 'lucide-react'
 import { notify } from '@/shared/ui/toast'
+import { formatTokenId } from '@/shared/lib/format'
 import { ErrorState } from '@/shared/ui/error-state'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { Gallery } from './components/gallery'
@@ -221,7 +222,7 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
 
           <div className="flex flex-col gap-3">
             <dl className={META_LINE}>
-              <div>ID do token: {tokenId}</div>
+              <div>ID do token: {formatTokenId(tokenId)}</div>
               <div>Coleção: {collectionLabel(nft.collectionId)}</div>
               <div>Atributos: {attributes.length ? attributes.join(', ') : '—'}</div>
             </dl>

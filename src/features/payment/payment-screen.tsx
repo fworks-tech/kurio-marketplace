@@ -7,6 +7,7 @@ import { ApiError } from '@/shared/api/api-error'
 import { describeQuoteChanges, diffQuote } from '@/shared/lib/quote-diff'
 import { notify } from '@/shared/ui/toast'
 import { Breadcrumb } from '@/shared/ui/breadcrumb'
+import { formatTokenId } from '@/shared/lib/format'
 import { ErrorState } from '@/shared/ui/error-state'
 import { PriceDisplay } from '@/shared/ui/price-display'
 import { Button } from '@/components/ui/button'
@@ -19,7 +20,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { useCart, cartLineMax } from '@/features/cart/cart-queries'
+import { useCart } from '@/features/cart/cart-queries'
 import { useSession } from '@/features/session/session-queries'
 import { ConfirmBar } from './components/confirm-bar'
 import { OrderSummary } from './components/order-summary'
@@ -133,6 +134,14 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
     setEmail((prev) => prev || session.user.email || '')
   }, [session])
 
+  // A signed-in collector already picked a primary wallet, so the checkout defaults
+  // to it instead of asking for a choice the account has made.
+  useEffect(() => {
+    if (manualWallet || walletAddress) return
+    const primary = wallets.data?.[0]
+    if (primary) setWalletAddress(primary.address)
+  }, [wallets.data, manualWallet, walletAddress])
+
   // Key is generated once per attempt so repeated clicks and timeouts replay the same order.
   const [attemptKey] = useState(generateIdempotencyKey)
   const placeOrder = useMutation({
@@ -209,7 +218,6 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
         items={[
           { label: 'Início', to: '/' },
           { label: 'Mercado', to: '/' },
-          { label: 'Carrinho', to: '/cart' },
           { label: 'Pagamento' }
         ]}
       />
@@ -420,10 +428,10 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
                     {item.nft.title}
                   </p>
                   <p className="text-sandish mt-1 text-sm leading-4">
-                    ID do token: {item.nft.id}
+                    ID do token: {formatTokenId(item.nft.id)}
                   </p>
                   <p className="text-text-secondary text-xs leading-4">
-                    Edição {item.nft.edition}/{item.nft.totalEdition} · Qtd. {item.quantity}/{cartLineMax(item)}
+                    Edição {item.nft.edition}/{item.nft.totalEdition} · Qtd. {item.quantity}
                   </p>
                 </div>
                 <PriceDisplay
