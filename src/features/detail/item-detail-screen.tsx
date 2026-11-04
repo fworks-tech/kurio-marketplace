@@ -292,6 +292,12 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
           <h2 className="text-highlight text-[17px] leading-4 font-bold">Mais desta coleção</h2>
           <div className="border-primary/30 mt-3 border-t-[0.3px]" />
           <NftGrid items={related} variant="compact" className="mt-8" />
+          {/* Figma Carousel Dots: 12px, 8px de intervalo, controle central preenchido. */}
+          <div className="mt-8 flex justify-center gap-2" aria-hidden>
+            <span className="border-primary size-3 rounded-full border-[1.3px]" />
+            <span className="bg-primary size-3 rounded-full" />
+            <span className="border-primary size-3 rounded-full border-[1.3px]" />
+          </div>
         </section>
       ) : null}
     </main>

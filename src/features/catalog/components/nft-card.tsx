@@ -62,7 +62,7 @@ export function NftCard({
             }}
             className="aspect-square w-full object-cover"
           />
-          {nft.badges?.length ? (
+          {!compact && nft.badges?.length ? (
             <div className="absolute top-2 left-2 flex flex-wrap gap-2">
               {nft.badges.map((kind) => (
                 <CatalogBadge key={kind} kind={kind} />
