@@ -22,6 +22,13 @@ function activeTab(pathname: string): MobileTab {
   return 'inicio'
 }
 
+// The Figma mobile frames show the bottom bar only on Início; the market flow
+// (detail, cart, payment, order) and the auth screens stand on their own. Profile
+// and wallets are our own screens and keep the bar so mobile users can navigate.
+function showsTabBar(pathname: string): boolean {
+  return !/^\/(nfts\/|cart|payment|orders\/|login|signup|components)/.test(pathname)
+}
+
 // Market-flow screens (detail, cart, payment, order) use a bare header; the
 // home, auth, profile and wallets screens show the hairline divider under it.
 function headerChrome(pathname: string): { active: 'mercado' | 'inicio'; divider: boolean } {
@@ -71,7 +78,9 @@ function RootLayout() {
         </div>
         {/* The account frames (Perfil do Colecionador, Carteiras) have no footer. */}
         {hideFooter ? null : <SiteFooter />}
-        <MobileTabBar active={activeTab(pathname)} className="md:hidden" />
+        {showsTabBar(pathname) ? (
+          <MobileTabBar active={activeTab(pathname)} className="md:hidden" />
+        ) : null}
       </div>
     </AuthDialogProvider>
   )

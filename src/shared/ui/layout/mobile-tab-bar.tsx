@@ -15,8 +15,13 @@ interface MobileTabBarProps {
   className?: string
 }
 
+/**
+ * Figma `Mobile / Início` tab bar: 95px bar with 20px outline icons at 40px from
+ * the top and a 65px floating action that overlaps the bar by 31px. Labels are
+ * screen-reader only, matching the icon-only bar in the design.
+ */
 function TabLabel({ children }: { children: string }) {
-  return <span className="text-[11px]">{children}</span>
+  return <span className="sr-only">{children}</span>
 }
 
 export function MobileTabBar({ active, className }: MobileTabBarProps) {
@@ -30,7 +35,7 @@ export function MobileTabBar({ active, className }: MobileTabBarProps) {
     <nav
       aria-label="Navegação inferior"
       className={cn(
-        'border-border bg-ink/95 shadow-tab-up fixed inset-x-0 bottom-0 z-40 grid grid-cols-5 items-center border-t px-2 pb-[env(safe-area-inset-bottom)] pt-2 backdrop-blur',
+        'border-border bg-ink/95 shadow-tab-up fixed inset-x-0 bottom-0 z-40 grid h-[95px] grid-cols-5 items-center border-t px-4 pt-6 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur',
         className
       )}
     >
@@ -52,8 +57,8 @@ export function MobileTabBar({ active, className }: MobileTabBarProps) {
 
       {/* FAB is decorative in this demo — the listing flow is out of scope. */}
       <span aria-hidden className="flex justify-center">
-        <span className="bg-gradient-fab pointer-events-none -mt-6 flex size-14 items-center justify-center rounded-full text-white shadow-glow">
-          <PlusIcon className="size-6" />
+        <span className="bg-gradient-fab pointer-events-none -mt-[31px] flex size-[65px] items-center justify-center rounded-full text-white shadow-glow">
+          <PlusIcon aria-hidden className="size-6" />
         </span>
       </span>
 
