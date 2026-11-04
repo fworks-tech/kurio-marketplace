@@ -12,6 +12,10 @@ interface OrderSummaryProps {
   loading?: boolean
   updating?: boolean
   className?: string
+  /** Fee note alignment: right in the cart frame, centered in the payment frame. */
+  noteAlign?: 'left' | 'center' | 'right'
+  /** Payment frame insets the total row by 42px; the cart frame keeps it flush. */
+  insetTotal?: boolean
 }
 
 /**
@@ -26,7 +30,9 @@ export function OrderSummary({
   totalEth,
   loading,
   updating,
-  className
+  className,
+  noteAlign = 'right',
+  insetTotal = false
 }: OrderSummaryProps) {
   if (loading) {
     return <SummarySkeleton className={className} />
@@ -59,13 +65,24 @@ export function OrderSummary({
           <span className="text-canvas text-[15px] leading-[19.8px]">Taxa de rede</span>
           <span className="text-canvas text-lg leading-4 tabular-nums">{formatPrice(networkFeeEth)}</span>
         </div>
-        <p className="text-highlight text-right text-xs leading-4">Taxa estimada</p>
+        <p
+          className={cn(
+            'text-highlight text-xs leading-4',
+            noteAlign === 'center' && 'text-center',
+            noteAlign === 'right' && 'text-right'
+          )}
+        >
+          Taxa estimada
+        </p>
       </div>
 
       <TotalRow
         label="Total"
         value={formatPrice(totalEth)}
-        className="pt-3 [&>span]:text-canvas [&>span]:text-base [&>span]:leading-4 [&>span]:font-bold [&>span:last-child]:text-highlight [&>span:last-child]:text-lg [&>span:last-child]:tabular-nums"
+        className={cn(
+          'pt-3 [&>span]:text-canvas [&>span]:text-base [&>span]:leading-4 [&>span]:font-bold [&>span:last-child]:text-highlight [&>span:last-child]:text-lg [&>span:last-child]:tabular-nums',
+          insetTotal && 'px-[42px]'
+        )}
       />
     </div>
   )
