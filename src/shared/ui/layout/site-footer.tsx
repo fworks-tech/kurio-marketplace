@@ -11,7 +11,7 @@ interface FooterLink {
 
 const VALUE_PROPS = [
   {
-    mark: 'K',
+    mark: 'W',
     title: 'Segurança da carteira',
     body: 'Proteja sua carteira e colecione arte digital verificada com confiança.'
   },
@@ -31,7 +31,7 @@ const LINK_COLUMNS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'Meu perfil',
     links: [
-      { label: 'Perfil', to: '/profile' },
+      { label: 'Meu perfil', to: '/profile' },
       { label: 'Minha coleção' },
       { label: 'Atividade' },
       { label: 'Estúdio do criador' },
@@ -44,8 +44,8 @@ const LINK_COLUMNS: { heading: string; links: FooterLink[] }[] = [
       { label: 'Central de ajuda' },
       { label: 'Como comprar NFTs' },
       { label: 'Carteira e segurança' },
-      { label: 'Política do marketplace' },
-      { label: 'Denunciar um item' }
+      { label: 'Política do mercado' },
+      { label: 'Denunciar item' }
     ]
   },
   {
@@ -60,7 +60,7 @@ const LINK_COLUMNS: { heading: string; links: FooterLink[] }[] = [
   }
 ]
 
-const SOCIALS = ['X', 'Discord', 'Instagram']
+const SOCIALS = ['Facebook', 'Instagram', 'Twitter', 'LinkedIn', 'YouTube'] as const
 
 interface SiteFooterProps {
   onSubscribe?: (email: string) => void
@@ -91,7 +91,7 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
     <footer className={cn('mt-24', className)}>
       <div className="mx-auto w-full max-w-[1248px] px-4 sm:px-6">
         {/* Value props + newsletter */}
-        <div className="bg-surface-card px-8 py-6">
+        <div className="bg-surface-card px-8 py-8">
           <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[265fr_265fr_265fr_357fr] lg:divide-x lg:divide-primary">
             {VALUE_PROPS.map((item) => (
               <div key={item.title} className="flex min-w-0 flex-col gap-3 lg:px-4">
@@ -131,8 +131,8 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
                 </button>
               </form>
               <p className="text-text-secondary text-[13px] leading-[22px]">
-                Receba drops selecionados, histórias de criadores e recompensas para colecionadores
-                direto na sua caixa de entrada.
+                Receba lançamentos selecionados, histórias de criadores e recompensas de
+                colecionadores na sua caixa de entrada.
               </p>
               <div role="status" aria-live="polite" className="text-sand text-xs">
                 {status}
@@ -142,7 +142,7 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
         </div>
 
         {/* Contact bar */}
-        <div className="bg-[#38220F] px-8 py-5">
+        <div className="bg-[#38220F] px-8 py-8">
           <div className="flex flex-wrap items-center gap-x-[92px] gap-y-3">
             <span className="text-canvas text-sm leading-[18px] font-bold tracking-[0.1em]">
               KURIO
@@ -156,9 +156,9 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
         </div>
 
         {/* Link columns */}
-        <div className="grid gap-8 px-8 py-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
+        <div className="grid gap-8 px-8 py-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-[124px]">
           {LINK_COLUMNS.map((column) => (
-            <nav key={column.heading} aria-label={column.heading} className="flex flex-col gap-2.5">
+            <nav key={column.heading} aria-label={column.heading} className="flex flex-col gap-2">
               <h2 className="text-canvas text-[18px] leading-4 font-bold">{column.heading}</h2>
               <ul className="flex flex-col">
                 {column.links.map((link) => (
@@ -190,12 +190,16 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
           <div className="flex flex-col gap-2.5">
             <nav aria-label="Redes sociais" className="flex flex-col gap-2.5">
               <h2 className="text-canvas text-[18px] leading-4 font-bold">Redes sociais</h2>
-              <ul className="flex flex-col">
+              <ul className="flex items-center gap-3">
                 {SOCIALS.map((social) => (
-                  <li key={social} className="text-canvas text-sm leading-[30px]">
-                    <span aria-disabled="true" className="cursor-not-allowed">
-                      {social}
-                      <span className="sr-only"> (em breve)</span>
+                  <li key={social}>
+                    <span
+                      role="img"
+                      aria-label={`${social} (em breve)`}
+                      title={`${social} (em breve)`}
+                      className="text-canvas hover:text-highlight block"
+                    >
+                      <SocialMark name={social} />
                     </span>
                   </li>
                 ))}
@@ -203,7 +207,7 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
             </nav>
             <h2 className="text-canvas text-[18px] leading-4 font-bold">Carteiras compatíveis</h2>
             <p className="text-highlight text-[9px] leading-3 font-bold tracking-[0.1em]">
-              METAMASK · PHANTOM · WALLETCONNECT
+              METAMASK · WALLETCONNECT · COINBASE
             </p>
           </div>
         </div>
@@ -213,5 +217,44 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
         </p>
       </div>
     </footer>
+  )
+}
+
+/** O lucide não distribui logos de terceiros: as marcas do frame vão como SVG. */
+function SocialMark({ name }: { name: (typeof SOCIALS)[number] }) {
+  if (name === 'Facebook') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+        <path d="M14.5 9H17V6h-2.5C12.6 6 11 7.6 11 9.5V11H9v3h2v7h3v-7h2.4l.6-3H14v-1.2c0-.5.2-.8.5-.8Z" />
+      </svg>
+    )
+  }
+  if (name === 'Instagram') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <rect x="4" y="4" width="16" height="16" rx="5" />
+        <circle cx="12" cy="12" r="3.6" />
+        <circle cx="16.8" cy="7.2" r="1" fill="currentColor" stroke="none" />
+      </svg>
+    )
+  }
+  if (name === 'Twitter') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+        <path d="M22 5.8c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1A4 4 0 0 0 12 9.2a11.4 11.4 0 0 1-8.3-4.2 4 4 0 0 0 1.2 5.4c-.6 0-1.2-.2-1.8-.5a4 4 0 0 0 3.2 4 4 4 0 0 1-1.8.1 4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 18.6 11.3 11.3 0 0 0 8.2 20c7.5 0 11.6-6.2 11.6-11.6v-.5c.8-.6 1.5-1.3 2.2-2.1Z" />
+      </svg>
+    )
+  }
+  if (name === 'LinkedIn') {
+    return (
+      <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+        <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9V9Z" />
+      </svg>
+    )
+  }
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+      <path d="M21.6 7.2c-.2-.9-.9-1.6-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4c-.9.2-1.6.9-1.8 1.8C2 8.8 2 12 2 12s0 3.2.4 4.8c.2.9.9 1.6 1.8 1.8C5.8 19 12 19 12 19s6.2 0 7.8-.4c.9-.2 1.6-.9 1.8-1.8.4-1.6.4-4.8.4-4.8s0-3.2-.4-4.8ZM10 15.2V8.8l5.4 3.2-5.4 3.2Z" />
+    </svg>
   )
 }
