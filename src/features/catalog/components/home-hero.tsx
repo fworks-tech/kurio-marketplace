@@ -5,8 +5,8 @@
 export function HomeHero() {
   return (
     <section className="mx-auto w-full max-w-[1248px] px-4 sm:px-6">
-      <div className="bg-gradient-art relative flex flex-col items-start gap-8 overflow-hidden rounded-[24px] px-6 py-8 sm:px-8 lg:h-[450px] lg:flex-row lg:items-center lg:gap-[110px] lg:py-0 lg:pr-0 lg:pl-10">
-        <div className="flex w-full flex-col gap-8 lg:w-[600px] lg:shrink-0 lg:gap-11">
+      <div className="bg-gradient-art relative flex flex-col items-start gap-8 overflow-hidden px-6 py-8 sm:px-8 lg:h-[450px] lg:flex-row lg:items-center lg:gap-[110px] lg:py-0 lg:pr-0 lg:pl-10">
+        <div className="flex w-full flex-col gap-8 lg:w-[600px] lg:shrink-0">
           <div className="flex flex-col gap-1">
             <div className="flex flex-col gap-2">
               <p className="text-canvas text-sm leading-4 font-medium tracking-[0.1em]">
@@ -27,15 +27,15 @@ export function HomeHero() {
 
           <a
             href="#produtos"
-            className="bg-primary text-ink inline-flex h-10 w-[140px] items-center justify-center rounded-md text-base leading-5 font-bold transition-[filter] hover:brightness-105"
+            className="bg-primary text-ink inline-flex h-10 w-[140px] items-center justify-start rounded-md pl-7 text-base leading-5 font-bold transition-[filter] hover:brightness-105"
           >
             EXPLORAR
           </a>
 
-          <div className="flex justify-end gap-2" aria-hidden>
+          <div className="mt-3 flex justify-end gap-2" aria-hidden>
             <span className="bg-primary size-2 rounded-full" />
-            <span className="bg-primary size-2 rounded-full opacity-50" />
-            <span className="bg-primary size-2 rounded-full opacity-50" />
+            <span className="bg-primary size-2 rounded-full" />
+            <span className="bg-primary size-2 rounded-full" />
           </div>
         </div>
 
