@@ -62,6 +62,8 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Avaliações no detalhe | Resolvido: as abas `Detalhes do NFT` e `Avaliações de colecionadores (N)` leem as avaliações do contrato do mock. |
 | Campos de perfil no checkout | Resolvido: a sessão mantém nome, e-mail e ENS e o pagamento abre com o perfil preenchido e a carteira principal selecionada. |
 | Cobertura de UI de cupom | Resolvido: `e2e/coupon-flow.spec.ts` cobre cupom válido, inexistente, expirado e remoção. |
+| Iconografia do rodapé (comentário 2:2) | Resolvido: os círculos laranja das propostas de valor passaram a usar ícones (escudo, pena, sino) no lugar das letras W/C/D. |
+| Coleções em ordem alfabética (comentário 2:2) | Resolvido: a lista de coleções do filtro é ordenada por rótulo em pt-BR. |
 | Pagamento fiel ao frame 11:2862 | Resolvido: conteúdo de 1200px, colunas 763/405 com 32px de calha, rótulos 15/400, asterisco coral 22px, itens com quantidade e preço em #E89B55, taxa estimada centralizada, total recuado 42px e carteiras na ordem do frame (WalletConnect primeiro). |
 | Faixa de preço digitada (comentário #5) | Resolvido: dois campos de mínimo e máximo ao lado do slider, com inversão automática quando o mínimo passa do máximo. |
 | Carrinho fiel ao frame 11:1278 | Resolvido: tabela de 782px com as cinco colunas do Figma, cupom com botão embutido, resumo com desconto e "Taxa estimada", stepper 20x30 e o rail de relacionados com cinco cards e paginação. |
