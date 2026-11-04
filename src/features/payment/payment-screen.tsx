@@ -68,7 +68,7 @@ function CheckoutField({
           </label>
         ) : null}
         {required ? (
-          <span aria-hidden className="text-error text-[22px] leading-[29px]">
+          <span aria-hidden className="text-coral text-[22px] leading-[29px]">
             *
           </span>
         ) : null}
@@ -196,7 +196,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
 
   if (cart.isLoading || quote.isLoading) {
     return (
-      <main className="mx-auto max-w-[1248px] px-7 pt-8 pb-[132px] sm:px-6 lg:pb-8">
+      <main className="mx-auto max-w-[1248px] px-6 pt-8 pb-[132px] lg:pb-8">
         <h1 className="sr-only">Pagamento</h1>
         <p className="text-text-secondary mt-2 text-sm">Preparando seu checkout…</p>
       </main>
@@ -205,7 +205,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
 
   if (items.length === 0) {
     return (
-      <main className="mx-auto max-w-[1248px] px-7 pt-8 pb-[132px] sm:px-6 lg:pb-8">
+      <main className="mx-auto max-w-[1248px] px-6 pt-8 pb-[132px] lg:pb-8">
         <h1 className="sr-only">Pagamento</h1>
         <ErrorState message="Seu carrinho está vazio. Adicione um NFT antes de ir para o pagamento." />
       </main>
@@ -213,7 +213,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
   }
 
   return (
-    <main className="mx-auto max-w-[1248px] px-7 pt-8 pb-[132px] sm:px-6 lg:pb-8">
+    <main className="mx-auto max-w-[1248px] px-6 pt-8 pb-[132px] lg:pb-8">
       <Breadcrumb
         items={[
           { label: 'Início', to: '/' },
@@ -223,11 +223,11 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
       />
       <h1 className="sr-only">Pagamento</h1>
 
-      <div className="mt-4 grid gap-8 lg:grid-cols-[763px_405px] lg:justify-between">
+      <div className="mt-8 grid gap-8 lg:grid-cols-[763px_405px]">
         <section aria-label="Perfil do colecionador">
           <h2 className="text-[17px] leading-4 font-bold">Perfil do colecionador</h2>
 
-          <div className="mt-5 grid gap-x-6 gap-y-3 sm:grid-cols-2">
+          <div className="mt-3 grid gap-x-6 gap-y-3 sm:grid-cols-2">
             <CheckoutField label="Nome de exibição" required htmlFor="co-display">
               <Input
                 id="co-display"
@@ -365,7 +365,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
               setManualWallet((prev) => !prev)
               setWalletAddress('')
             }}
-            className="text-canvas mt-5 flex items-center gap-3 text-[15px] leading-5 hover:underline"
+            className="text-canvas mt-6 flex items-center gap-2 text-[15px] leading-5 hover:underline"
           >
             <span
               aria-hidden
@@ -377,7 +377,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
             {manualWallet ? 'Usar carteira conectada' : 'Usar outra carteira?'}
           </button>
 
-          <div className="mt-4 w-[350px] max-w-full">
+          <div className="mt-6 w-[350px] max-w-full">
             <label htmlFor="co-note" className="text-canvas text-[15px] leading-[15px]">
               Observação do colecionador (opcional)
             </label>
@@ -407,7 +407,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <h2 className="text-[17px] leading-4 font-bold">Seus NFTs</h2>
 
-          <div className="mt-4 flex items-center justify-between border-b border-primary pb-2 text-base">
+          <div className="mt-3 flex items-center justify-between border-b border-primary pb-3 text-base leading-4">
             <span className="font-bold">NFTs</span>
             <span className="font-medium">Subtotal</span>
           </div>
@@ -416,33 +416,33 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
             {items.map((item) => (
               <li
                 key={item.nftId}
-                className="bg-surface-card flex h-[70px] items-center gap-3 rounded-[4px] p-1"
+                className="bg-surface-card flex h-[70px] items-center gap-3 rounded-none pr-4 pl-1"
               >
                 <img
                   src={item.nft.imageUrl}
                   alt=""
-                  className="size-[70px] shrink-0 rounded-[4px] object-cover"
+                  className="size-[70px] shrink-0 rounded-[8px] object-cover"
                 />
                 <div className="min-w-0 flex-1">
                   <p className="text-canvas truncate text-base leading-4 font-bold">
                     {item.nft.title}
                   </p>
-                  <p className="text-sand mt-1 text-sm leading-4">
+                  <p className="text-sand mt-1.5 text-sm leading-4">
                     ID do token: {formatTokenId(item.nft.id)}
                   </p>
-                  <p className="text-text-secondary text-xs leading-4">
-                    Edição {item.nft.edition}/{item.nft.totalEdition} · Qtd. {item.quantity}
-                  </p>
                 </div>
-                <PriceDisplay
-                  value={item.total}
-                  className="text-canvas shrink-0 pr-2 text-base leading-4 font-bold"
-                />
+                <div className="flex shrink-0 items-center gap-4">
+                  <span className="text-text-secondary text-sm leading-4">(x {item.quantity})</span>
+                  <PriceDisplay
+                    value={item.total}
+                    className="text-highlight text-lg leading-4 font-bold"
+                  />
+                </div>
               </li>
             ))}
           </ul>
 
-          <p className="text-canvas mt-4 text-sm leading-4">
+          <p className="text-canvas mt-3 text-center text-sm leading-4">
             Tem um código promocional? Aplique aqui
           </p>
 
@@ -457,6 +457,8 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
             discountEth={shown && Number(shown.discount) > 0 ? shown.discount : undefined}
             networkFeeEth={shown?.networkFee ?? '0'}
             totalEth={shown?.total ?? '0'}
+            noteAlign="center"
+            insetTotal
           />
 
           <p className="text-text-secondary mt-3 text-xs">
