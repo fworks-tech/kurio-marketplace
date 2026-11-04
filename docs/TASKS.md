@@ -62,6 +62,7 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Avaliações no detalhe | Resolvido: as abas `Detalhes do NFT` e `Avaliações de colecionadores (N)` leem as avaliações do contrato do mock. |
 | Campos de perfil no checkout | Resolvido: a sessão mantém nome, e-mail e ENS e o pagamento abre com o perfil preenchido e a carteira principal selecionada. |
 | Cobertura de UI de cupom | Resolvido: `e2e/coupon-flow.spec.ts` cobre cupom válido, inexistente, expirado e remoção. |
+| Gap do header ao rolar | Resolvido: os 24px acima da barra (frame 2:2, y=24) passaram para o próprio elemento sticky, então a distância não desaparece mais no scroll. Teste em `e2e/header-sticky.spec.ts`. |
 | Microalinhamento reconferido (Home, login, cadastro, detalhe) | Resolvido: CTA do hero centralizado (140x40), fundo do card conferido em #241612 como o Rectangle 7, calha das linhas do grid uniforme (72px), ações do header de detalhe com 28px entre os itens como o frame, subtítulo do cadastro mantido em 13/16 com 40px do título conforme o arquivo. |
 | Iconografia do rodapé (comentário 2:2) | Resolvido: os círculos laranja das propostas de valor passaram a usar ícones (escudo, pena, sino) no lugar das letras W/C/D. |
 | Coleções em ordem alfabética (comentário 2:2) | Resolvido: a lista de coleções do filtro é ordenada por rótulo em pt-BR. |
