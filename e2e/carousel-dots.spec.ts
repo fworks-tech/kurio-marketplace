@@ -120,7 +120,9 @@ test.describe("controles de carrossel", () => {
     await page.goto("/");
     const firstCard = page.locator("article:has(.text-price) h3").first();
     await expect(firstCard).toBeVisible();
-    await page.locator('a[href^="/nfts/"]').first().click();
+    // Scope to a grid card: the sidebar banner also links to a work, but it is
+    // hidden on small viewports.
+    await page.locator('article:has(.text-price) a[href^="/nfts/"]').first().click();
 
     const dots = page
       .getByRole("group", { name: "Mais desta coleção" })
