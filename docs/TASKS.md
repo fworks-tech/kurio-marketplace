@@ -59,8 +59,8 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | --- | --- |
 | Auditoria pixel a pixel do mobile | As seis telas mobile têm verificação de overflow, mas não comparação frame a frame. |
 | Logos de carteira e mídia real dos NFTs | Assets não fornecidos; hoje são placeholders de gradiente. |
-| Avaliações no detalhe | Sem endpoint de reviews no contrato; a seção não é renderizada de propósito. |
-| Campos de perfil no checkout | Formulário renderiza os campos; o envio ao `POST /orders` segue fora do contrato atual. |
+| Avaliações no detalhe | Resolvido: as abas `Detalhes do NFT` e `Avaliações de colecionadores (N)` leem as avaliações do contrato do mock. |
+| Campos de perfil no checkout | Resolvido: a sessão mantém nome, e-mail e ENS e o pagamento abre com o perfil preenchido e a carteira principal selecionada. |
 | Cobertura de UI de cupom | Resolvido: `e2e/coupon-flow.spec.ts` cobre cupom válido, inexistente, expirado e remoção. |
 
 ## Suíte E2E
@@ -68,7 +68,7 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Arquivo | Cobertura |
 | --- | --- |
 | `e2e/smoke.spec.ts` | Shell da home, navegação por teclado, rotas, guarda de sessão e deep link. |
-| `e2e/purchase-flow.spec.ts` | Compra do detalhe à confirmação, com cupom e carrinho vazio bloqueando o checkout. |
+| `e2e/purchase-flow.spec.ts` | Compra do detalhe à confirmação, promoção do pedido por evento do socket sem recarregar, cupom e carrinho vazio bloqueando o checkout. |
 | `e2e/payment-failure.spec.ts` | Recusa da operadora com carrinho intacto, recusa da carteira e sessão expirada no orçamento. |
 | `e2e/profile-wallets.spec.ts` | Perfil (edição persistente, validação de senha), carteiras e encerramento de sessão com guarda de rota. |
 | `e2e/coupon-flow.spec.ts` | Cupom válido, inexistente, expirado e remoção do desconto. |
@@ -84,7 +84,7 @@ Auditoria feita em https://kurio-marketplace-theta.vercel.app, com o build de pr
 | --- | --- |
 | Rotas com acesso direto | `/`, `/nfts/nft-001`, `/profile`, `/wallets`, `/payment` respondem 200 e o refresh mantém a rota. |
 | Guarda de sessão | `/profile` e `/wallets` sem sessão redirecionam para `/login?redirect=…`; após o login a tela abre com o conteúdo. |
-| Tempo real | `POST /api/__simulate/nft-updated` levou o preço de 2,5 para 9,99 ETH no detalhe, sem refetch REST. |
+| Tempo real | `POST /api/__simulate/nft-updated` levou o preço de 2,5 para 9,99 ETH no detalhe e `order-updated` promoveu o pedido para confirmado na tela, ambos sem recarregar. |
 | Perfil e carteiras | `h1` "Perfil do colecionador" (9 campos) e "Carteira principal" renderizados com dados da sessão. |
 | Lighthouse (mediana de 3 por página) | `/`: 100 / 97 / 96 / 100; `/nfts/nft-001`: 99 / 100 / 96 / 100; `/login`: 99 / 100 / 96 / 100 (performance / acessibilidade / boas práticas / SEO). LCP 0,6–0,7 s, CLS 0, TBT ≤ 8 ms. Relatórios em `docs/lighthouse`. |
 

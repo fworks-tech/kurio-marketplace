@@ -181,7 +181,8 @@ deve aparecer e o que comparar. São cerca de 10 minutos de ponta a ponta.
 - Itens comprados com imagem, quantidade e preço; resumo com taxa de rede e total.
 - Identificador do pedido, comprador e link do explorer quando há transação.
 - Pedido inexistente mostra o estado de erro com `Tentar novamente`.
-- Para conferir a mudança de status, envie o evento e recarregue a página:
+- A tela reage ao evento de liquidação sem recarregar. Para conferir, envie o evento
+  com o pedido aberto:
 
 ```js
 await fetch('/api/__simulate/order-updated', {
@@ -190,6 +191,8 @@ await fetch('/api/__simulate/order-updated', {
   body: JSON.stringify({ orderId: 'SEU_PEDIDO', status: 'confirmed' })
 })
 ```
+
+O título vira `Compra realizada!` e o selo passa a confirmado.
 
 ### 7. Perfil do colecionador (`/profile`) · `Desktop / Perfil do Colecionador 1440`
 
