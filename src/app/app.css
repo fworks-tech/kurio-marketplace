@@ -271,3 +271,99 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Toasts ──────────────────────────────────────────────────────────────
+   Sonner ships unstyled-by-default markup; these rules bind it to the Kurio
+   tokens so a toast reads as part of the interface instead of the browser's
+   default white card. Colours come from the variables set in the Toaster. */
+.kurio-toaster [data-sonner-toast][data-styled='true'] {
+  padding: 12px 40px 12px 15px !important;
+  border-left: 3px solid var(--kurio-toast-accent, var(--color-primary)) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow:
+    0 12px 32px rgb(0 0 0 / 0.45),
+    0 1px 0 rgb(245 241 235 / 0.04) inset !important;
+  font-family: var(--font-mono, 'Roboto Mono', monospace) !important;
+  gap: 10px !important;
+  align-items: flex-start !important;
+}
+
+.kurio-toaster [data-sonner-toast][data-styled='true'][data-type='success'] {
+  --kurio-toast-accent: var(--color-primary);
+}
+
+.kurio-toaster [data-sonner-toast][data-styled='true'][data-type='error'] {
+  --kurio-toast-accent: var(--color-coral);
+}
+
+.kurio-toaster [data-sonner-toast][data-styled='true'][data-type='info'] {
+  --kurio-toast-accent: var(--color-sand);
+}
+
+.kurio-toaster [data-sonner-toast][data-styled='true'][data-type='warning'] {
+  --kurio-toast-accent: var(--color-amber);
+}
+
+.kurio-toaster [data-sonner-toast][data-styled='true'][data-type='loading'] {
+  --kurio-toast-accent: var(--color-text-secondary);
+}
+
+.kurio-toaster [data-icon] {
+  color: var(--kurio-toast-accent, var(--color-primary));
+  margin-top: 1px;
+  height: 18px;
+  width: 18px;
+}
+
+.kurio-toaster .kurio-toast__title {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 18px;
+  letter-spacing: 0.01em;
+  white-space: normal;
+}
+
+.kurio-toaster .kurio-toast__description {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  line-height: 17px;
+}
+
+.kurio-toaster .kurio-toast__close {
+  top: 10px;
+  right: 10px;
+  left: auto;
+  height: 24px;
+  width: 24px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-field);
+  background: transparent;
+  color: var(--color-sand);
+  transform: none;
+}
+
+.kurio-toaster .kurio-toast__close:hover {
+  border-color: var(--color-muted-strong);
+  background: var(--color-surface-raised);
+  color: var(--color-canvas);
+}
+
+.kurio-toaster .kurio-toast__close:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.kurio-toaster .kurio-toast__action {
+  background: var(--color-primary);
+  color: var(--color-ink);
+  border-radius: var(--radius-field);
+  font-weight: 700;
+  height: 28px;
+  padding: 0 12px;
+}
+
+@media (max-width: 640px) {
+  .kurio-toaster [data-sonner-toast][data-styled='true'] {
+    width: calc(100vw - 24px) !important;
+  }
+}
