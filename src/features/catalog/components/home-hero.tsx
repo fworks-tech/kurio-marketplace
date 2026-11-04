@@ -49,7 +49,7 @@ export function HomeHero() {
 
           <a
             href="#produtos"
-            className="bg-primary text-ink inline-flex h-10 w-[140px] items-center justify-start rounded-md pl-7 text-base leading-5 font-bold transition-[filter] hover:brightness-105"
+            className="bg-primary text-ink inline-flex h-10 w-[140px] items-center justify-center rounded-md text-base leading-5 font-bold transition-[filter] hover:brightness-105"
           >
             EXPLORAR
           </a>
