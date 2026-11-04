@@ -84,14 +84,14 @@ export function FilterPanel({ facets, values, bounds, onChange }: FilterPanelPro
             onChange={setRange}
             hideLabel
           />
-          <div className="flex items-center justify-between gap-3">
-            <span className="text-canvas text-[15px] leading-5">
+          <div className="flex flex-col items-start gap-3">
+            <span className="text-canvas text-[15px] leading-[19.8px]">
               Preço: {formatPriceRange(fromMicro(range.min), fromMicro(range.max))}
             </span>
             <button
               type="button"
               onClick={() => onChange({ minPrice: range.min, maxPrice: range.max })}
-              className="bg-primary text-ink h-9 shrink-0 rounded-md px-3 text-base font-bold"
+              className="bg-primary text-ink h-9 w-[92px] rounded-md text-base leading-5 font-bold"
             >
               Aplicar
             </button>

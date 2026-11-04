@@ -17,9 +17,9 @@ interface PriceRangeSliderProps {
 }
 
 const INPUT_CLASS =
-  'pointer-events-none absolute inset-0 h-1.5 w-full appearance-none bg-transparent ' +
-  '[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:size-4 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-white [&::-webkit-slider-thumb]:bg-primary ' +
-  '[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:size-4 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-white [&::-moz-range-thumb]:bg-primary'
+  'pointer-events-none absolute inset-x-0 top-1/2 h-[21px] w-full -translate-y-1/2 appearance-none bg-transparent ' +
+  '[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:size-[15px] [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-[3px] [&::-webkit-slider-thumb]:border-ink [&::-webkit-slider-thumb]:bg-primary ' +
+  '[&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:size-[15px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-[3px] [&::-moz-range-thumb]:border-ink [&::-moz-range-thumb]:bg-primary'
 
 /** Two native range inputs share one track so both thumbs are keyboard operable. */
 export function PriceRangeSlider({ min, max, value, onChange, className, hideLabel }: PriceRangeSliderProps) {
@@ -34,10 +34,11 @@ export function PriceRangeSlider({ min, max, value, onChange, className, hideLab
           {formatPriceRange(fromMicro(value.min), fromMicro(value.max))}
         </span>
       ) : null}
-      <div className="relative h-1.5">
-        <div className="bg-white/15 absolute inset-0 rounded-full" />
+      <div className="relative h-[21px]">
+        {/* Figma: trilho de 4px inteiro em #D28A4C, punhos de 15px com anel de 3px no fundo. */}
+        <div className="bg-primary absolute inset-x-0 top-1/2 h-1 -translate-y-1/2" />
         <div
-          className="bg-primary absolute inset-y-0 rounded-full"
+          className="bg-primary absolute top-1/2 h-1 -translate-y-1/2"
           style={{ left: `${pctLeft}%`, right: `${pctRight}%` }}
         />
         <input
