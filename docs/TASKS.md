@@ -17,7 +17,7 @@ fica no backlog. Medições com Playwright em viewport de 1440 px; a passada res
 | Cadastro | `/signup` | Completa | Mesmo shell do login; conflito de e-mail e usuário tratado. |
 | Perfil do colecionador | `/profile` | Completa | Sidebar 310, gutter 28, formulário 862; nome, e-mail, ENS e avatar. |
 | Carteiras | `/wallets` | Completa | Mesmo shell; carteira principal e secundária, criação e edição. |
-| Mobile (6 frames) | mesmas rotas | Responsiva | Sem overflow horizontal a 390 e 414 px; auditoria pixel a pixel pendente. |
+| Mobile (6 frames) | mesmas rotas | Completa | Métricas dos frames aplicadas: busca 313x45, tab bar 95 px com FAB 65 px, campos de 50 px, CTAs de 60 px e gutters de 24/28 px. |
 
 ## Fluxos
 
@@ -57,7 +57,7 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 
 | Item | Por que ainda não está pronto |
 | --- | --- |
-| Auditoria pixel a pixel do mobile | As seis telas mobile têm verificação de overflow, mas não comparação frame a frame. |
+| Auditoria pixel a pixel do mobile | Fechado: `e2e/mobile-layout.spec.ts` mede busca, tab bar, campos, CTAs e overflow nas seis telas. |
 | Logos de carteira e mídia real dos NFTs | Assets não fornecidos; hoje são placeholders de gradiente. |
 | Avaliações no detalhe | Resolvido: as abas `Detalhes do NFT` e `Avaliações de colecionadores (N)` leem as avaliações do contrato do mock. |
 | Campos de perfil no checkout | Resolvido: a sessão mantém nome, e-mail e ENS e o pagamento abre com o perfil preenchido e a carteira principal selecionada. |

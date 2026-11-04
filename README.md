@@ -23,6 +23,19 @@ banco de dados nem servidor real.
 | Componentes | shadcn/ui (Radix) |
 | Mocking | MSW 3 (REST + WebSocket) |
 | Testes | Vitest (unidade e contrato) + Playwright (E2E, a11y e regressão visual) |
+### Layout mobile
+
+As seis telas mobile seguem as medidas dos frames `Mobile / *` (414x896): linha de
+busca de 45 px com campo de 313 px e filtro de 45x45, tab bar de 95 px com ação
+flutuante de 65 px sobreposta em 31 px, barra de filtros em drawer, campos de 50 px
+com raio 10 e CTAs de 60 px (raio 40 no carrinho e no pagamento). Os gutters são de
+24 px no conteúdo e 28 px nas telas de autenticação.
+
+A tab bar aparece apenas nas telas que não têm outra navegação; detalhe, carrinho,
+pagamento, login e cadastro ficam sem ela, como nos frames, o que também evita
+sobreposição com o CTA fixo do pagamento. `e2e/mobile-layout.spec.ts` mede essas
+métricas, valida a busca no mobile e garante ausência de rolagem horizontal.
+
 | Auditoria | Lighthouse CI |
 
 ## Requisitos
