@@ -58,8 +58,9 @@ export function SiteHeader({
             const isActive = active === item.key
             const label = cn(
               'text-base leading-[21px] whitespace-nowrap',
-              isActive ? 'text-highlight font-bold' : 'text-canvas font-normal hover:text-highlight',
-              item.to === null && 'cursor-not-allowed'
+              isActive ? 'text-highlight font-bold' : 'text-canvas font-normal',
+              // Itens sem destino não recebem realce de hover: são inertes, não links.
+              item.to === null ? 'cursor-not-allowed' : 'hover:text-highlight'
             )
             return (
               <div key={item.key} className="flex h-[45px] flex-col items-start justify-between">
