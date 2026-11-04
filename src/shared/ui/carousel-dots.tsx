@@ -6,7 +6,7 @@ interface CarouselDotsProps {
   onChange: (index: number) => void;
   /** Accessible name of the dot group, e.g. "Obras em destaque". */
   label: string;
-  /** Figma sizes: 8px inside the hero, 12px in the carousel under the grid. */
+  /** Figma sizes: 7px on mobile, 8px in the desktop hero, 12px under the grid. */
   size?: "sm" | "md";
   className?: string;
 }
@@ -25,7 +25,10 @@ export function CarouselDots({
 }: CarouselDotsProps) {
   if (count < 2) return null;
 
-  const dot = size === "sm" ? "size-2" : "size-3";
+  const dot =
+    size === "sm"
+      ? "size-[7px] gap-[7px] sm:size-2 sm:gap-2"
+      : "size-3";
   // Figma draws the three hero dots as identical solid circles, with no hollow
   // "inactive" state; only the wider collection carousel keeps outlines.
   const solid = size === "sm";
@@ -34,7 +37,7 @@ export function CarouselDots({
     <div
       role="group"
       aria-label={label}
-      className={cn("flex gap-2", className)}
+      className={cn("flex gap-[7px] sm:gap-2", className)}
     >
       {Array.from({ length: count }, (_, position) => {
         const current = position === index;
