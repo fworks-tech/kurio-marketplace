@@ -65,7 +65,7 @@ function RootLayout() {
 
   return (
     <AuthDialogProvider>
-      <div className="bg-bg text-text flex min-h-dvh flex-col pt-6">
+      <div className="bg-bg text-text flex min-h-dvh flex-col">
         <SiteHeader
           isAuthenticated={Boolean(session)}
           cartCount={(session ? (cart.data?.length ?? 0) : 0) + guestCount}

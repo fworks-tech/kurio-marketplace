@@ -43,7 +43,15 @@ export function SiteHeader({
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className={cn('bg-ink sticky top-0 z-40', divider && 'border-b-[0.3px] border-primary')}>
+    <header
+      className={cn(
+        // The 24px Figma gap above the bar belongs to the sticky element: if it
+        // stayed on the page wrapper, scrolling would snap the bar to the very
+        // top of the viewport and the spacing would appear to vanish.
+        'bg-ink sticky top-0 z-40 pt-6',
+        divider && 'border-b-[0.3px] border-primary'
+      )}
+    >
       <div className="mx-auto flex h-[45px] max-w-[1248px] items-start justify-between gap-4 px-4 sm:px-6">
         <Link
           to="/"
