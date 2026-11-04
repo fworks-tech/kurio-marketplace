@@ -2,17 +2,27 @@ import { expect, type Page } from '@playwright/test'
 
 export const USER = { email: 'alice@example.com', password: 'password123' }
 
+/**
+ * Below 1024px the auth screens are full pages (Figma mobile frames) instead of the
+ * desktop dialog, so every auth assertion goes through this scope helper.
+ */
+export function authScope(page: Page) {
+  return page.getByRole('dialog').or(page.locator('main'))
+}
+
 /** Sign in through the /login route and land back on the home page. */
 export async function signIn(page: Page) {
   await page.goto('/login')
-  await page.locator('#login-usuario').fill(USER.email)
-  await page.locator('#login-senha').fill(USER.password)
+  const user = page.locator('#login-usuario, #m-login-usuario').first()
+  const password = page.locator('#login-senha, #m-login-senha').first()
+  await user.fill(USER.email)
+  await password.fill(USER.password)
   // Wait for the login round-trip: the mocked session exists only once it resolves,
   // and user-scoped requests fired earlier would come back unauthorized.
   const login = page.waitForResponse(
     (response) => response.url().includes('/api/auth/login') && response.status() === 200
   )
-  await page.getByRole('dialog').getByRole('button', { name: 'Entrar' }).click()
+  await authScope(page).getByRole('button', { name: 'Entrar', exact: true }).click()
   await login
   await expect(page).toHaveURL(/\/$/)
 }
@@ -22,7 +32,7 @@ export async function addToCart(page: Page, nftId = 'nft-001', quantity = 1) {
   await page.goto(`/nfts/${nftId}`)
   const increase = page.getByRole('button', { name: 'Aumentar quantidade' })
   for (let index = 1; index < quantity; index += 1) await increase.click()
-  await page.getByRole('button', { name: 'COMPRAR' }).click()
+  await page.getByRole('button', { name: /COMPRAR|Comprar NFT/ }).click()
   await expect(page.getByText('Adicionado ao carrinho.').first()).toBeVisible()
 }
 

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { authScope } from './helpers'
 
 test('home shell renders with brand, heading and live region', async ({ page }) => {
   const errors: string[] = []
@@ -25,9 +26,9 @@ test('client-side navigation moves between routes', async ({ page }) => {
 
   // /cart renders its guard in place, so sign in first through the auth route.
   await page.goto('/login')
-  await page.locator('#login-usuario').fill('alice@example.com')
-  await page.locator('#login-senha').fill('password123')
-  await page.getByRole('dialog').getByRole('button', { name: 'Entrar' }).click()
+  await page.locator('#login-usuario, #m-login-usuario').first().fill('alice@example.com')
+  await page.locator('#login-senha, #m-login-senha').first().fill('password123')
+  await authScope(page).getByRole('button', { name: 'Entrar', exact: true }).click()
   await expect(page).toHaveURL('/')
 
   await page.locator('header').first().getByRole('link', { name: 'Carrinho' }).click()

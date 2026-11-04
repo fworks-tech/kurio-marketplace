@@ -25,7 +25,7 @@ export function MobileAuthPage({ mode, onAuthenticated }: MobileAuthPageProps) {
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-canvas">
-      <div className="w-full px-7 pt-20 pb-6">
+      <main className="w-full px-7 pt-20 pb-6">
       <div className="mx-auto flex w-full max-w-[358px] flex-col">
         <div className="flex h-[136px] items-center justify-center">
           <span className="text-canvas text-[32px] leading-[42px] font-bold tracking-[0.04em]">
@@ -49,7 +49,7 @@ export function MobileAuthPage({ mode, onAuthenticated }: MobileAuthPageProps) {
           <SignupBody onAuthenticated={onAuthenticated} onSwitch={() => setTab('login')} />
         )}
       </div>
-      </div>
+      </main>
     </div>
   )
 }

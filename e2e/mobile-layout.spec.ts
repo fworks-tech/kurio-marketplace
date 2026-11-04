@@ -66,16 +66,19 @@ test.describe('layout mobile conforme Figma', () => {
   })
 
   test('login e cadastro usam campos de 50px e CTA de 60px', async ({ page }) => {
+    // Below 1024px the auth screens are full pages, so the scope is `main`.
     for (const [path, action] of [
       ['/login', 'Entrar'],
-      ['/signup', 'Criar conta']
+      ['/signup', 'Criar perfil']
     ] as const) {
       await page.goto(path)
-      const dialog = page.getByRole('dialog')
-      await expect(dialog).toBeVisible()
-      const field = await dialog.locator('input').first().boundingBox()
+      const scope = page.locator('main')
+      await expect(scope.getByRole('heading', { level: 1 })).toHaveText(
+        path === '/login' ? 'Entrar' : 'Criar perfil de colecionador'
+      )
+      const field = await scope.locator('input').first().boundingBox()
       expect(Math.round(field!.height), `${path} campo`).toBe(50)
-      const cta = await dialog.getByRole('button', { name: action }).first().boundingBox()
+      const cta = await scope.getByRole('button', { name: action }).first().boundingBox()
       expect(Math.round(cta!.height), `${path} CTA`).toBe(60)
     }
   })
