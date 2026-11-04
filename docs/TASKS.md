@@ -60,8 +60,19 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Auditoria pixel a pixel do mobile | As seis telas mobile têm verificação de overflow, mas não comparação frame a frame. |
 | Logos de carteira e mídia real dos NFTs | Assets não fornecidos; hoje são placeholders de gradiente. |
 | Avaliações no detalhe | Sem endpoint de reviews no contrato; a seção não é renderizada de propósito. |
-| Campos de perfil no checkout | Dependem de mudança em `POST /orders` para viajar no pedido. |
-| Cobertura de UI de cupom | O contrato de cupom tem teste; o fluxo de digitação na tela não. |
+| Campos de perfil no checkout | Formulário renderiza os campos; o envio ao `POST /orders` segue fora do contrato atual. |
+| Cobertura de UI de cupom | Resolvido: `e2e/coupon-flow.spec.ts` cobre cupom válido, inexistente, expirado e remoção. |
+
+## Suíte E2E
+
+| Arquivo | Cobertura |
+| --- | --- |
+| `e2e/smoke.spec.ts` | Shell da home, navegação por teclado, rotas, guarda de sessão e deep link. |
+| `e2e/purchase-flow.spec.ts` | Compra do detalhe à confirmação, com cupom e carrinho vazio bloqueando o checkout. |
+| `e2e/payment-failure.spec.ts` | Recusa da operadora com carrinho intacto, recusa da carteira e sessão expirada no orçamento. |
+| `e2e/coupon-flow.spec.ts` | Cupom válido, inexistente, expirado e remoção do desconto. |
+| `e2e/components-a11y.spec.ts` | Componentes isolados e estados de foco. |
+| `e2e/visual.spec.ts` | Baseline do shell (Windows). |
 
 ## Verificação na URL publicada
 
