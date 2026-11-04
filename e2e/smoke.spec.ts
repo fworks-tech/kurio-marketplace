@@ -5,7 +5,7 @@ test('home shell renders with brand, heading and live region', async ({ page }) 
   page.on('pageerror', (error) => errors.push(error.message))
 
   await page.goto('/')
-  await expect(page.getByRole('heading', { level: 1, name: 'OWN THE FUTURE OF DIGITAL ART' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO DO FUTURO/ })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Kurio' })).toBeVisible()
   await expect(page.locator('[aria-live="polite"]').first()).toBeAttached()
   expect(errors).toEqual([])
@@ -27,7 +27,7 @@ test('client-side navigation moves between routes', async ({ page }) => {
   await page.goto('/login')
   await page.locator('#login-usuario').fill('alice@example.com')
   await page.locator('#login-senha').fill('password123')
-  await page.getByRole('button', { name: 'Confirmar' }).click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Entrar' }).click()
   await expect(page).toHaveURL('/')
 
   await page.locator('header').first().getByRole('link', { name: 'Carrinho' }).click()
@@ -48,7 +48,7 @@ test('login dialog opens in place without changing route or page', async ({ page
 
   await page.locator('#login-usuario').fill('alice@example.com')
   await page.locator('#login-senha').fill('password123')
-  await page.getByRole('button', { name: 'Confirmar' }).click()
+  await page.getByRole('dialog').getByRole('button', { name: 'Entrar' }).click()
 
   await expect(page.getByRole('dialog')).toHaveCount(0)
   await expect(page).toHaveURL(/\/nfts\/nft-001$/)

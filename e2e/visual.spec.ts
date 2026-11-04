@@ -20,6 +20,6 @@ test('home shell matches the committed baseline', async ({ page }, testInfo) => 
   test.skip(!existsSync(baseline), `no ${process.platform} baseline committed yet`)
 
   await page.goto('/')
-  await expect(page.getByRole('heading', { level: 1, name: 'OWN THE FUTURE OF DIGITAL ART' })).toBeVisible()
+  await expect(page.getByRole('heading', { level: 1, name: /SEJA DONO DO FUTURO/ })).toBeVisible()
   await expect(page).toHaveScreenshot('home-shell.png', { fullPage: true })
 })
