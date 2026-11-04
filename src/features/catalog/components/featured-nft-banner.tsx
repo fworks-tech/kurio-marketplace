@@ -7,7 +7,11 @@ export function FeaturedNftBanner() {
       <img
         src="/images/nft-18.webp"
         alt="NFT em destaque"
-        className="h-[360px] w-full rounded-[22px] object-cover"
+        className="h-[368px] w-full rounded-[22px] object-cover"
+      />
+      <span
+        className="border-primary absolute top-[299px] left-4 size-[22px] rounded-[7px] border-2 opacity-20"
+        aria-hidden
       />
       <span className="bg-gradient-decor absolute top-[105px] left-9 size-[15px] rounded-full" aria-hidden />
       <span className="bg-gradient-decor absolute top-[343px] right-3 size-[45px] rounded-full" aria-hidden />
