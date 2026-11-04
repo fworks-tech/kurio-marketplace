@@ -114,6 +114,121 @@ deixando o estado reprodutível para uma nova avaliação ou teste.
 Os endpoints `__simulate` atualizam o estado do mock e emitem o evento correspondente
 pelo socket — a UI reage como reagiria a um evento real.
 
+## Roteiro de auditoria end-to-end
+
+Sequência única que percorre todas as páginas e estados da aplicação, na ordem em que um
+colecionador passaria por elas. Cada etapa indica a tela correspondente do Figma, o que
+deve aparecer e o que comparar. São cerca de 10 minutos de ponta a ponta.
+
+**Preparação**
+
+1. `npm ci && npm run build && npm run preview` (ou abra
+   https://kurio-marketplace-theta.vercel.app).
+2. Use janela de **1440 px** para os frames desktop e **414 px** para os mobile.
+3. Antes de começar, no console do navegador: `__mocks.reset()`.
+
+### 1. Início (`/`) · `Desktop / Início 1440` e `Mobile / Início 414`
+
+- Abas de categoria com contagem (`Arte digital (40)`, `Fotografia (14)`, ...).
+- Filtros: aplicar categoria e faixa de preço, confirmar que a grade e a URL acompanham.
+- Busca no cabeçalho, com resultado e com termo sem correspondência.
+- Ordenação e paginação ao pé da grade.
+- Card do produto: imagem, nome, preço em ETH, estado (edição aberta ou esgotada).
+- Cabeçalho: logo, Início/Mercado/Criadores/Aprenda, busca, carrinho com contador, Entrar.
+- Rodapé: colunas de links, carteiras aceitas, ícones sociais e contato.
+- Mobile: barra de abas inferior, hero e grade em coluna única.
+
+### 2. Detalhes do NFT (`/nfts/nft-002`) · `Desktop / Detalhes do NFT 1440`
+
+- Breadcrumb `Início / Mercado`, título, preço em `#E89B55`, estrelas e pílulas de
+  edição com o estado (ABERTA ou ESGOTADA).
+- Seletor de quantidade e ações `COMPRAR` e `Favoritar`.
+- Abas `Detalhes do NFT` e `Avaliações de colecionadores (N)`.
+- Seção de relacionados com indicadores de navegação.
+- Mobile: folha de detalhes e barra de compra fixa.
+
+### 3. Carrinho (`/cart`) · `Desktop / Carrinho de NFTs 1440`
+
+- Sem sessão a página pede login no próprio local; os itens ficam no carrinho de
+  convidado e continuam lá depois de entrar.
+- Com sessão: itens com imagem, quantidade editável e remoção.
+- Cupons: `WELCOME10` (10%), `FLAT5` (0,5 fixo) e `EXPIRED20` (erro visível na tela).
+- Resumo com subtotal, desconto, taxa estimada e total.
+- `Continuar explorando` volta ao mercado e `Conectar e finalizar` segue para o pagamento.
+
+### 4. Login e cadastro (`/login`, `/signup`) · `Desktop / Login 1440`, `Desktop / Cadastro 1440` e modais
+
+- Modal aberto pelo cabeçalho e páginas completas com o mesmo formulário.
+- Credenciais fictícias: `alice@example.com` e `password123`.
+- Validação: campos vazios e credenciais inválidas mostram mensagem por campo.
+- Rota protegida: `/profile` sem sessão redireciona para `/login?redirect=/profile`.
+
+### 5. Pagamento (`/payment`) · `Desktop / Pagamento 1440`
+
+- Perfil do colecionador já preenchido com a conta autenticada (nome de exibição, usuário,
+  e-mail e nome ENS).
+- Endereço da carteira com a carteira principal salva pré-selecionada, com opção de
+  digitar outro endereço.
+- Rede (Ethereum, Polygon, Base) e tipo de carteira (MetaMask, Coinbase, WalletConnect).
+- Confirmação exige os termos marcados e avisa quando a cotação muda entre a abertura e o
+  envio.
+- `Confirmar compra` cria o pedido e navega para a confirmação.
+- Mobile: resumo colapsado em `Mobile / Pagamento 414`.
+
+### 6. Confirmação do Pedido (`/orders/:id`) · `Desktop / Confirmação de Pedido 1440`
+
+- Título de status (`Compra realizada!`, `Pedido em processamento`, `Pedido recusado`) e selo.
+- Itens comprados com imagem, quantidade e preço; resumo com taxa de rede e total.
+- Identificador do pedido, comprador e link do explorer quando há transação.
+- Pedido inexistente mostra o estado de erro com `Tentar novamente`.
+- Para conferir a mudança de status, envie o evento e recarregue a página:
+
+```js
+await fetch('/api/__simulate/order-updated', {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify({ orderId: 'SEU_PEDIDO', status: 'confirmed' })
+})
+```
+
+### 7. Perfil do colecionador (`/profile`) · `Desktop / Perfil do Colecionador 1440`
+
+- Menu lateral `Meu perfil`: Dados do perfil, Carteiras, Atividade, Lista de interesse,
+  Ofertas, Arquivos baixados, Suporte e Sair.
+- Campos: nome de exibição, usuário, e-mail, ENS com sufixo `.eth`, apelido da carteira e
+  avatar (`Alterar` e `Remover`).
+- Alteração de senha com validação de senha atual e confirmação.
+- `Salvar` persiste os dados e confirma por toast.
+
+### 8. Carteiras (`/wallets`) · `Desktop / Carteiras 1440`
+
+- Carteira principal com os campos do protótipo: nome de exibição, apelido da carteira,
+  rede, nome do perfil, endereço, ENS ou carteira secundária, tipo de carteira, código de
+  indicação, e-mail e nome ENS.
+- `Salvar carteira` grava e reflete a carteira no pagamento.
+- Carteira secundária: `Igual à carteira principal` espelha os dados da principal.
+
+### 9. Acessibilidade e design system
+
+- Rotas de apoio em desenvolvimento: `/design-system` e `/components`.
+- Navegação por teclado com foco visível, modais com foco preso e `Esc` fechando.
+- Um `<h1>` por rota e landmark `main` em todas as páginas.
+- Verificação automatizada: `npm run test:e2e` (inclui `@axe-core/playwright`).
+
+### Checklist rápido
+
+| Etapa | Rota | Frame de referência |
+| --- | --- | --- |
+| Início | `/` | `Desktop / Início 1440`, `Mobile / Início 414` |
+| Detalhes | `/nfts/:id` | `Desktop / Detalhes do NFT 1440`, `Mobile / Detalhes do NFT 414` |
+| Carrinho | `/cart` | `Desktop / Carrinho de NFTs 1440`, `Mobile / Carrinho de NFTs 414` |
+| Login | `/login` | `Desktop / Login 1440`, `Mobile / Login 414` |
+| Cadastro | `/signup` | `Desktop / Cadastro 1440`, `Mobile / Cadastro 414` |
+| Pagamento | `/payment` | `Desktop / Pagamento 1440`, `Mobile / Pagamento 414` |
+| Confirmação | `/orders/:id` | `Desktop / Confirmação de Pedido 1440` |
+| Perfil | `/profile` | `Desktop / Perfil do Colecionador 1440` |
+| Carteiras | `/wallets` | `Desktop / Carteiras 1440` |
+
 ## Estrutura
 
 ```text
@@ -160,5 +275,5 @@ com o mesmo `dist` e rewrite equivalente.
   o cliente é importado sob demanda e o motivo está em [ARCHITECTURE.md](ARCHITECTURE.md).
 - Desvios de layout medidos e explicados (Home +43 px, Detalhe −175 px, Carrinho
   −94 px, Pagamento −41 px) estão em [docs/TASKS.md](docs/TASKS.md).
-- O detalhe do NFT não tem avaliações: o contrato do mock não expõe esse recurso, e a
-  UI não simula um bloco que a API não sustenta.
+- As avaliações do detalhe do NFT vêm do contrato do mock; não há moderação nem envio de
+  novas avaliações pela interface.
