@@ -62,6 +62,10 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Avaliações no detalhe | Resolvido: as abas `Detalhes do NFT` e `Avaliações de colecionadores (N)` leem as avaliações do contrato do mock. |
 | Campos de perfil no checkout | Resolvido: a sessão mantém nome, e-mail e ENS e o pagamento abre com o perfil preenchido e a carteira principal selecionada. |
 | Cobertura de UI de cupom | Resolvido: `e2e/coupon-flow.spec.ts` cobre cupom válido, inexistente, expirado e remoção. |
+| Nome de exibição duplicado no perfil | Aberto: ao salvar, o valor guardado é reaplicado sobre o texto digitado (`Alice ColecionadoraAlice Neumann`). O cenário `persiste após recarregar` está como `test.fixme` até a correção. |
+| Formulário de perfil no pagamento mobile | Aberto: comentário do Figma (caiodev) aponta que o mobile mostra só a seleção de carteira, sem os 10 campos do desktop. |
+| Campos numéricos no filtro de preço | Aberto: comentários apontam imprecisão do slider no mobile; previsto min/máx digitáveis ao lado dele. |
+| Estados pendente e recusado do pedido | Aberto: só o confirmado está desenhado no Figma. |
 
 ## Suíte E2E
 
@@ -70,10 +74,14 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | `e2e/smoke.spec.ts` | Shell da home, navegação por teclado, rotas, guarda de sessão e deep link. |
 | `e2e/purchase-flow.spec.ts` | Compra do detalhe à confirmação, promoção do pedido por evento do socket sem recarregar, cupom e carrinho vazio bloqueando o checkout. |
 | `e2e/payment-failure.spec.ts` | Recusa da operadora com carrinho intacto, recusa da carteira e sessão expirada no orçamento. |
-| `e2e/profile-wallets.spec.ts` | Perfil (edição persistente, validação de senha), carteiras e encerramento de sessão com guarda de rota. |
+| `e2e/profile-wallets.spec.ts` | Perfil (validação de senha), carteiras e encerramento de sessão com guarda de rota, verificando o header sem recarregar. |
+| `e2e/signup-flow.spec.ts` | Cadastro: conta nova com sessão persistida, senhas divergentes, e-mail já usado e alternância com o login. |
+| `e2e/catalog-sorting.spec.ts` | Ordenação por preço e nome, reset de página, aba sincronizada e persistência após recarregar. |
+| `e2e/favorites.spec.ts` | Favoritar e desfavoritar no card e no detalhe, além do convite de login para visitantes. |
+| `e2e/carousel-dots.spec.ts` | Os três pontos do hero e a paginação de "Mais desta coleção". |
 | `e2e/coupon-flow.spec.ts` | Cupom válido, inexistente, expirado e remoção do desconto. |
 | `e2e/components-a11y.spec.ts` | Componentes isolados e estados de foco. |
-| `e2e/visual.spec.ts` | Baseline do shell (Windows). |
+| `e2e/visual.spec.ts` | Baselines Linux de home (desktop e mobile), detalhe, carrinho e pagamento. |
 
 ## Verificação na URL publicada
 
