@@ -55,6 +55,13 @@ describe('contract validation (Epic 22)', () => {
     walletSchema.parse(walletPrimary)
   })
 
+  it('keeps the collector fields the checkout relies on', () => {
+    const parsed = authSessionSchema.parse(sessionAlice)
+    expect(parsed.user.displayName).toBe('Alice Neumann')
+    expect(parsed.user.email).toBe('alice@example.com')
+    expect(parsed.user.ensName).toBe('alicen')
+  })
+
   it('validates catalog list responses and pagination metadata', async () => {
     const page = await nftService.list({ pageSize: 2 })
     for (const nft of page.data) nftSummarySchema.parse(nft)

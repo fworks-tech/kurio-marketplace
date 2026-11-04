@@ -133,6 +133,10 @@ export const authSessionSchema: z.ZodType<AuthSession> = z.object({
     id: z.string(),
     address: z.string(),
     username: z.string(),
+    // Collector-facing fields: dropping them here emptied the checkout profile.
+    displayName: z.string().optional(),
+    email: z.string().optional(),
+    ensName: z.string().optional(),
     avatar: z.string().nullable(),
     walletCount: z.number(),
     totalVolume: money,
