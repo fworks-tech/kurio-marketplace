@@ -255,6 +255,7 @@ src/
   components/ primitivas shadcn/ui restilizadas por token
   mocks/      handlers, estado, cenários, fixtures, socket, ativação
 e2e/          smoke, acessibilidade e regressão visual (Playwright)
+e2e/visual.spec.ts-snapshots/  baselines PNG por plataforma (home, detalhe, carrinho, pagamento)
 ```
 
 Regra de dependência: `features` → `shared` → contratos; nenhum componente importa
@@ -265,7 +266,11 @@ Regra de dependência: `features` → `shared` → contratos; nenhum componente 
 - **Typecheck:** um único `tsconfig.json` cobre `src` e `e2e`.
 - **Lint:** ESLint com TypeScript, `unused-imports` e `no-console` como aviso.
 - **Testes:** Vitest (unidade, contrato REST, estado, socket) e Playwright (smoke,
-  `@axe-core/playwright` e regressão visual pronta para baselines por plataforma).
+  `@axe-core/playwright` e regressão visual com baselines por plataforma).
+- **Baselines visuais:** cinco telas versionadas em Linux (home desktop e mobile, detalhe,
+  carrinho e pagamento). Para regravar em outra máquina:
+  `UPDATE_BASELINES=1 npx playwright test e2e/visual.spec.ts --update-snapshots`. Onde não
+  existe baseline para a plataforma corrente o teste é pulado, em vez de falhar.
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, metas
   Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90.
 - **Lighthouse na URL publicada** (`npm run lighthouse:prod`, mediana de 3 execuções por
