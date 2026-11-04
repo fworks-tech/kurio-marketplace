@@ -9,7 +9,7 @@ test.describe('fluxo de compra', () => {
     await page.locator('header').first().getByRole('link', { name: 'Carrinho' }).click()
     await expect(page.getByRole('heading', { level: 1, name: 'Carrinho de NFTs' })).toBeVisible()
 
-    await page.getByRole('textbox', { name: 'Cupom de desconto' }).fill('WELCOME10')
+    await page.getByRole('textbox', { name: 'Código promocional' }).fill('WELCOME10')
     await page.getByRole('button', { name: 'Aplicar' }).click()
     await expect(page.getByText(/Cupom WELCOME10 aplicado/i)).toBeVisible()
 
