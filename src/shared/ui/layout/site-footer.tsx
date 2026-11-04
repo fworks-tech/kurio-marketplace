@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { BellRingIcon, PenToolIcon, ShieldCheckIcon } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
 import { useAuthDialog } from '@/features/auth/auth-dialog'
@@ -11,17 +12,17 @@ interface FooterLink {
 
 const VALUE_PROPS = [
   {
-    mark: 'W',
+    icon: ShieldCheckIcon,
     title: 'Segurança da carteira',
     body: 'Proteja sua carteira e colecione arte digital verificada com confiança.'
   },
   {
-    mark: 'C',
+    icon: PenToolIcon,
     title: 'Criadores em destaque',
     body: 'Conheça artistas, estúdios e comunidades que moldam a cultura digital na rede.'
   },
   {
-    mark: 'D',
+    icon: BellRingIcon,
     title: 'Alertas de lançamentos',
     body: 'Receba calendários de cunhagem, novidades de listas de acesso e análises do mercado.'
   }
@@ -97,9 +98,9 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
               <div key={item.title} className="flex min-w-0 flex-col gap-3 lg:px-4">
                 <span
                   aria-hidden
-                  className="bg-primary text-ink grid size-[74px] shrink-0 place-items-center rounded-full text-2xl leading-8 font-bold"
+                  className="bg-primary text-ink grid size-[74px] shrink-0 place-items-center rounded-full"
                 >
-                  {item.mark}
+                  <item.icon className="size-8" strokeWidth={1.75} />
                 </span>
                 <h2 className="text-canvas text-[17px] leading-4 font-bold">{item.title}</h2>
                 <p className="text-text-secondary max-w-[204px] text-sm leading-[22px]">{item.body}</p>
