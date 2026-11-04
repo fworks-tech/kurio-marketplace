@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { fromMicro } from '@/shared/api/money'
+import { useEffect, useId, useRef, useState } from 'react'
+import { fromMicro, toMicro } from '@/shared/api/money'
 import { formatPriceRange } from '@/shared/lib/format'
 import { cn } from '@/lib/utils'
 import type { CatalogFacetOption, CatalogFacets, CatalogFilterValues } from '../catalog-types'
@@ -50,10 +50,68 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ facets, values, bounds, onChange }: FilterPanelProps) {
+  const priceId = useId()
   const [range, setRange] = useState({
     min: values.minPrice ?? bounds.min,
     max: values.maxPrice ?? bounds.max
   })
+  // Free-text copies of the bounds: the designer's note (comment #5) asks for two
+  // typed fields because a slider is imprecise, especially on touch screens.
+  const [minDraft, setMinDraft] = useState(() => fromMicro(values.minPrice ?? bounds.min))
+  const [maxDraft, setMaxDraft] = useState(() => fromMicro(values.maxPrice ?? bounds.max))
+
+  // Bounds arrive after the first paint: once the collector starts typing, the
+  // incoming defaults must not overwrite what was already written.
+  const typedPrice = useRef(false)
+
+  useEffect(() => {
+    if (typedPrice.current) return
+    setMinDraft(fromMicro(range.min))
+    setMaxDraft(fromMicro(range.max))
+  }, [range.min, range.max])
+
+  /** Reads both typed fields, clamps them to the catalog bounds and orders them. */
+  const draftRange = () => {
+    const parse = (raw: string, fallback: number) => {
+      const value = Number.parseFloat(raw.replace(',', '.'))
+      if (!Number.isFinite(value) || value < 0) return fallback
+      return Math.min(bounds.max, Math.max(bounds.min, toMicro(String(value))))
+    }
+    const min = parse(minDraft, range.min)
+    const max = parse(maxDraft, range.max)
+    return min <= max ? { min, max } : { min: max, max: min }
+  }
+
+  /** Writes the normalized values back, so an inverted range shows both fields swapped. */
+  const syncDrafts = (next: { min: number; max: number }) => {
+    setMinDraft(fromMicro(next.min))
+    setMaxDraft(fromMicro(next.max))
+  }
+
+  const commitDrafts = () => {
+    const next = draftRange()
+    setRange(next)
+    syncDrafts(next)
+  }
+
+  // The button reads the drafts directly: clicking it also blurs the field, and the
+  // blur commit lands after this handler, so relying on `range` would apply the old one.
+  const applyPrice = () => {
+    const next = draftRange()
+    setRange(next)
+    syncDrafts(next)
+    onChange({ minPrice: next.min, maxPrice: next.max })
+  }
+
+  const onDraftKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault()
+      commitDrafts()
+    }
+  }
+
+  const priceInputClass =
+    'border-field text-canvas placeholder:text-sand h-9 w-[92px] rounded-[3px] border bg-transparent px-2 text-sm tabular-nums focus-visible:ring-highlight focus-visible:ring-2 focus-visible:outline-none'
 
   // Bounds arrive with the facets request; without this the slider keeps the loading fallback.
   useEffect(() => {
@@ -84,13 +142,52 @@ export function FilterPanel({ facets, values, bounds, onChange }: FilterPanelPro
             onChange={setRange}
             hideLabel
           />
+          <div className="flex items-center gap-3">
+            <label htmlFor={`${priceId}-min`} className="sr-only">
+              Preço mínimo
+            </label>
+            <input
+              id={`${priceId}-min`}
+              inputMode="decimal"
+              value={minDraft}
+              placeholder="mín."
+              aria-label="Preço mínimo"
+              onChange={(event) => {
+                typedPrice.current = true
+                setMinDraft(event.target.value)
+              }}
+              onBlur={commitDrafts}
+              onKeyDown={onDraftKeyDown}
+              className={priceInputClass}
+            />
+            <span aria-hidden className="text-text-secondary text-sm">
+              —
+            </span>
+            <label htmlFor={`${priceId}-max`} className="sr-only">
+              Preço máximo
+            </label>
+            <input
+              id={`${priceId}-max`}
+              inputMode="decimal"
+              value={maxDraft}
+              placeholder="máx."
+              aria-label="Preço máximo"
+              onChange={(event) => {
+                typedPrice.current = true
+                setMaxDraft(event.target.value)
+              }}
+              onBlur={commitDrafts}
+              onKeyDown={onDraftKeyDown}
+              className={priceInputClass}
+            />
+          </div>
           <div className="flex flex-col items-start gap-3">
             <span className="text-canvas text-[15px] leading-[19.8px]">
               Preço: {formatPriceRange(fromMicro(range.min), fromMicro(range.max))}
             </span>
             <button
               type="button"
-              onClick={() => onChange({ minPrice: range.min, maxPrice: range.max })}
+              onClick={applyPrice}
               className="bg-primary text-ink h-9 w-[92px] rounded-md text-base leading-5 font-bold"
             >
               Aplicar
