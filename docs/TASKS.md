@@ -70,6 +70,7 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | `e2e/smoke.spec.ts` | Shell da home, navegação por teclado, rotas, guarda de sessão e deep link. |
 | `e2e/purchase-flow.spec.ts` | Compra do detalhe à confirmação, com cupom e carrinho vazio bloqueando o checkout. |
 | `e2e/payment-failure.spec.ts` | Recusa da operadora com carrinho intacto, recusa da carteira e sessão expirada no orçamento. |
+| `e2e/profile-wallets.spec.ts` | Perfil (edição persistente, validação de senha), carteiras e encerramento de sessão com guarda de rota. |
 | `e2e/coupon-flow.spec.ts` | Cupom válido, inexistente, expirado e remoção do desconto. |
 | `e2e/components-a11y.spec.ts` | Componentes isolados e estados de foco. |
 | `e2e/visual.spec.ts` | Baseline do shell (Windows). |
