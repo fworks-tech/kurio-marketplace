@@ -201,7 +201,7 @@ export default function CatalogPreview() {
 
         <Section title="Carrinho e pagamento">
           <div className="space-y-2">
-            <CartItemRow image="https://picsum.photos/seed/ape/200" title="Cyberpunk Ape #1" tokenId="1024" edition="1/10" priceEth="2.5" lineTotalEth="5.0" quantity={cartQty} max={10} onQuantityChange={setCartQty} onRemove={() => notify.info('Item removido (demo).')} />
+            <CartItemRow image="https://picsum.photos/seed/ape/200" title="Cyberpunk Ape #1" tokenId="1024" priceEth="2.5" lineTotalEth="5.0" quantity={cartQty} max={10} onQuantityChange={setCartQty} onRemove={() => notify.info('Item removido (demo).')} />
             <RowSkeleton />
           </div>
           <div className="grid gap-6 md:grid-cols-2">

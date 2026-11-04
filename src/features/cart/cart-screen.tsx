@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Breadcrumb } from '@/shared/ui/breadcrumb'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { ErrorState } from '@/shared/ui/error-state'
@@ -8,6 +8,7 @@ import { CartItemRow } from './components/cart-item-row'
 import { CouponField } from './components/coupon-field'
 import { OrderSummary } from '@/features/payment/components/order-summary'
 import { NftGrid } from '@/features/catalog/components/nft-grid'
+import { CarouselDots } from '@/shared/ui/carousel-dots'
 import { toCatalogNft, useNftList } from '@/features/catalog/catalog-queries'
 import {
   cartLineMax,
@@ -16,6 +17,29 @@ import {
   useRemoveCartItem,
   useUpdateCartQuantity
 } from './cart-queries'
+
+/**
+ * The related rail shows 2, 3 or 5 cards depending on the breakpoint, so one dot
+ * always stands for one visible screen (`COMPACT_GRID_CLASS` in `NftGrid`).
+ */
+function useVisibleCardCount(): number {
+  const [count, setCount] = useState(5)
+
+  useEffect(() => {
+    const wide = window.matchMedia('(min-width: 1024px)')
+    const medium = window.matchMedia('(min-width: 640px)')
+    const apply = () => setCount(wide.matches ? 5 : medium.matches ? 3 : 2)
+    apply()
+    wide.addEventListener('change', apply)
+    medium.addEventListener('change', apply)
+    return () => {
+      wide.removeEventListener('change', apply)
+      medium.removeEventListener('change', apply)
+    }
+  }, [])
+
+  return count
+}
 
 interface CartScreenProps {
   authenticated: boolean
@@ -27,16 +51,19 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
   const cart = useCart()
   const [couponInput, setCouponInput] = useState('')
   const [appliedCoupon, setAppliedCoupon] = useState<string | undefined>()
+  const [relatedPage, setRelatedPage] = useState(0)
+  const visibleCards = useVisibleCardCount()
   const quote = useQuote(appliedCoupon)
   const updateQuantity = useUpdateCartQuantity()
   const removeItem = useRemoveCartItem()
 
   const items = cart.data ?? []
   const inCart = new Set(items.map((item) => item.nftId))
-  const related = (useNftList({ pageSize: 6, sort: 'featured' }).data?.data ?? [])
+  const related = (useNftList({ pageSize: 20, sort: 'featured' }).data?.data ?? [])
     .filter((nft) => !inCart.has(nft.id))
-    .slice(0, 4)
     .map(toCatalogNft)
+  const relatedPages = Math.max(1, Math.ceil(related.length / visibleCards))
+  const visibleRelated = related.slice(relatedPage * visibleCards, (relatedPage + 1) * visibleCards)
 
   const couponStatus = appliedCoupon
     ? quote.isError
@@ -57,7 +84,8 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
     <main className="mx-auto max-w-[1248px] px-7 py-8 sm:px-6">
       <Breadcrumb items={[{ label: 'Início', to: '/' }, { label: 'Mercado', to: '/' }, { label: 'Carrinho' }]} />
       <h1 className="sr-only">Carrinho de NFTs</h1>
-      <div className="mt-4 grid gap-8 lg:grid-cols-[1fr_332px]">
+      {/* Figma `Cart Body`: 782px table, 86px gutter and a 332px wallet summary. */}
+      <div className="mt-3 grid gap-8 lg:grid-cols-[1fr_332px] lg:gap-[86px]">
         <section aria-label="Itens do carrinho">
           {cart.isLoading ? (
             <div className="space-y-3">
@@ -76,7 +104,7 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
             />
           ) : (
             <div>
-              <div className="text-canvas border-primary hidden grid-cols-[minmax(0,1fr)_auto_auto_auto_auto] items-center gap-4 border-b pb-3 text-base md:grid">
+              <div className="text-canvas border-primary hidden grid-cols-[250px_77px_75px_87px_24px] items-center justify-between border-b pb-3 text-base leading-4 md:grid md:pr-6">
                 <span className="font-bold">NFTs</span>
                 <span className="font-medium">Preço</span>
                 <span className="font-bold">Edições</span>
@@ -90,7 +118,6 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
                   image={item.nft.imageUrl}
                   title={item.nft.title}
                   tokenId={item.nft.id}
-                  edition={`${item.nft.edition}/${item.nft.totalEdition}`}
                   priceEth={item.price}
                   lineTotalEth={item.total}
                   quantity={item.quantity}
@@ -104,15 +131,18 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
           )}
         </section>
 
-        <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+        <aside className="lg:sticky lg:top-24 lg:self-start">
           <div>
-            <h2 className="border-primary mb-3 border-b pb-2 text-lg font-bold">Resumo da carteira</h2>
+            <h2 className="text-canvas border-primary mb-6 border-b pb-3 text-lg leading-4 font-bold">
+              Resumo da carteira
+            </h2>
             <CouponField
               value={couponInput}
               onChange={setCouponInput}
               onApply={() => setAppliedCoupon(couponInput.trim() || undefined)}
               status={couponStatus}
               message={quote.isError ? 'Cupom inválido ou expirado.' : undefined}
+              className="mb-6"
               appliedCode={couponStatus === 'applied' ? appliedCoupon : undefined}
               onRemove={() => {
                 setAppliedCoupon(undefined)
@@ -125,12 +155,12 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
             loading={quote.isLoading}
             updating={quote.isFetching && !quote.isLoading}
             subtotalEth={quote.data?.subtotal ?? '0'}
-            discountEth={quote.data && Number(quote.data.discount) > 0 ? quote.data.discount : undefined}
+            discountEth={quote.data?.discount ?? '0'}
             networkFeeEth={quote.data?.networkFee ?? '0'}
             totalEth={quote.data?.total ?? '0'}
           />
 
-          <div className="space-y-3">
+          <div className="mt-6">
             <Button
               className="h-[60px] w-full rounded-[40px] text-[16px] font-bold sm:h-10 sm:rounded-[3px] sm:text-[15px]"
               disabled={!canCheckout}
@@ -138,7 +168,11 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
             >
               Conectar e finalizar
             </Button>
-            <button type="button" onClick={onExplore} className="text-highlight block text-sm font-semibold hover:underline">
+            <button
+              type="button"
+              onClick={onExplore}
+              className="text-highlight mx-auto mt-3 block text-[15px] leading-[19.8px] hover:underline"
+            >
               Continuar explorando
             </button>
           </div>
@@ -146,11 +180,18 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
       </div>
 
       {related.length > 0 ? (
-        <section className="mt-12">
-          <h2 className="text-primary border-primary border-b pb-4 text-[17px] leading-4 font-bold">
+        <section className="mt-12 lg:mt-24">
+          <h2 className="text-highlight border-primary border-b pb-3 text-[17px] leading-4 font-bold">
             Colecionadores também viram
           </h2>
-          <NftGrid items={related} variant="compact" />
+          <NftGrid items={visibleRelated} variant="compact" className="mt-8" />
+          <CarouselDots
+            count={relatedPages}
+            index={relatedPage}
+            onChange={setRelatedPage}
+            label="Colecionadores também viram"
+            className="mt-8 justify-center"
+          />
         </section>
       ) : null}
     </main>
