@@ -5,7 +5,7 @@ exigida no enunciado. A aplicação roda **inteiramente contra mocks no navegado
 (MSW + transporte Socket.IO compatível): não há blockchain, gateway de pagamento,
 banco de dados nem servidor real.
 
-- **Demo publicada:** _(preencher após o deploy)_
+- **Demo publicada:** [https://kurio-marketplace-theta.vercel.app/](https://kurio-marketplace-theta.vercel.app/)
 - **Arquitetura e decisões:** [ARCHITECTURE.md](ARCHITECTURE.md)
 - **Status por tela e backlog:** [docs/TASKS.md](docs/TASKS.md)
 
