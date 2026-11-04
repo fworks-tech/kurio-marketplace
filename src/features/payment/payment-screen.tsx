@@ -427,7 +427,7 @@ export function PaymentScreen({ onPlaced }: PaymentScreenProps) {
                   <p className="text-canvas truncate text-base leading-4 font-bold">
                     {item.nft.title}
                   </p>
-                  <p className="text-sandish mt-1 text-sm leading-4">
+                  <p className="text-sand mt-1 text-sm leading-4">
                     ID do token: {formatTokenId(item.nft.id)}
                   </p>
                   <p className="text-text-secondary text-xs leading-4">
