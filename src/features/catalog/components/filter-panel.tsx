@@ -124,7 +124,7 @@ export function FilterPanel({ facets, values, bounds, onChange }: FilterPanelPro
         <section className="flex flex-col gap-3">
           <h2 className={SECTION_TITLE}>Coleções</h2>
           <FacetList
-            items={facets.collections}
+            items={[...facets.collections].sort((a, b) => a.label.localeCompare(b.label, 'pt-BR'))}
             selected={values.collection}
             onSelect={(collection) => onChange({ collection })}
             countClass="text-text-secondary font-bold"
