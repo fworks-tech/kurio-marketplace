@@ -35,7 +35,7 @@ export function MobileTabBar({ active, className }: MobileTabBarProps) {
     <nav
       aria-label="Navegação inferior"
       className={cn(
-        'border-border bg-ink/95 shadow-tab-up fixed inset-x-0 bottom-0 z-40 grid h-[95px] grid-cols-5 items-center border-t px-4 pt-6 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur',
+        'border-border bg-ink/95 shadow-tab-up fixed inset-x-0 bottom-0 z-40 grid h-[95px] grid-cols-5 items-center border-t px-4 pt-6 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur relative',
         className
       )}
     >
@@ -57,7 +57,7 @@ export function MobileTabBar({ active, className }: MobileTabBarProps) {
 
       {/* FAB is decorative in this demo — the listing flow is out of scope. */}
       <span aria-hidden className="flex justify-center">
-        <span className="bg-gradient-fab pointer-events-none -mt-[31px] flex size-[65px] items-center justify-center rounded-full text-white shadow-glow">
+        <span className="bg-gradient-fab pointer-events-none absolute -top-[31px] left-1/2 flex size-[65px] -translate-x-1/2 items-center justify-center rounded-full text-white shadow-glow">
           <PlusIcon aria-hidden className="size-6" />
         </span>
       </span>
