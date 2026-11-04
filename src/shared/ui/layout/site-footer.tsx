@@ -142,13 +142,14 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
         </div>
 
         {/* Contact bar */}
-        <div className="bg-[#38220F] px-8 py-8">
-          <div className="flex flex-wrap items-center gap-x-[92px] gap-y-3">
+        <div className="bg-surface-dark px-8 py-8">
+          {/* Figma Frame 119: cada coluna começa na mesma coordenada das colunas de links. */}
+          <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[211px_211px_211px_228px] lg:items-center lg:gap-[92px]">
             <span className="text-canvas text-sm leading-[18px] font-bold tracking-[0.1em]">
               KURIO
             </span>
             <p className="text-canvas text-sm leading-[22px] whitespace-pre-line">
-              {'Feito para colecionadores,\r\ncriadores e cultura'}
+              {'Feito para colecionadores,\ncriadores e cultura'}
             </p>
             <p className="text-canvas text-sm leading-[22px]">contato@email.com</p>
             <p className="text-canvas text-sm leading-[22px]">+55 11 4002 8922</p>
@@ -156,7 +157,7 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
         </div>
 
         {/* Link columns */}
-        <div className="grid gap-8 px-8 py-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-[124px]">
+        <div className="grid gap-8 px-8 py-8 sm:grid-cols-2 lg:grid-cols-[179px_179px_179px_228px] lg:gap-[124px]">
           {LINK_COLUMNS.map((column) => (
             <nav key={column.heading} aria-label={column.heading} className="flex flex-col gap-2">
               <h2 className="text-canvas text-[18px] leading-4 font-bold">{column.heading}</h2>
@@ -187,17 +188,18 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
             </nav>
           ))}
 
-          <div className="flex flex-col gap-2.5">
-            <nav aria-label="Redes sociais" className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-8">
+            <nav aria-label="Redes sociais" className="flex flex-col gap-5">
               <h2 className="text-canvas text-[18px] leading-4 font-bold">Redes sociais</h2>
-              <ul className="flex items-center gap-3">
+              {/* Figma Frame 113: caixas de 30x30, raio 4, borda 1px em #D28A4C e ícones de 16px. */}
+              <ul className="flex items-center gap-[10px]">
                 {SOCIALS.map((social) => (
                   <li key={social}>
                     <span
                       role="img"
                       aria-label={`${social} (em breve)`}
                       title={`${social} (em breve)`}
-                      className="text-canvas hover:text-highlight block"
+                      className="border-primary text-primary hover:bg-primary hover:text-ink grid size-[30px] place-items-center rounded-[4px] border transition-colors"
                     >
                       <SocialMark name={social} />
                     </span>
@@ -205,10 +207,12 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
                 ))}
               </ul>
             </nav>
-            <h2 className="text-canvas text-[18px] leading-4 font-bold">Carteiras compatíveis</h2>
-            <p className="text-highlight text-[9px] leading-3 font-bold tracking-[0.1em]">
-              METAMASK · WALLETCONNECT · COINBASE
-            </p>
+            <div className="flex flex-col gap-3">
+              <h2 className="text-canvas text-[18px] leading-4 font-bold">Carteiras compatíveis</h2>
+              <p className="bg-surface-dark border-muted-strong text-highlight flex h-[26px] w-[228px] items-center justify-center rounded-md border px-2 text-[9px] leading-3 font-bold tracking-[0.1em]">
+                METAMASK • WALLETCONNECT • COINBASE
+              </p>
+            </div>
           </div>
         </div>
 
@@ -224,7 +228,7 @@ export function SiteFooter({ onSubscribe, className }: SiteFooterProps) {
 function SocialMark({ name }: { name: (typeof SOCIALS)[number] }) {
   if (name === 'Facebook') {
     return (
-      <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+      <svg viewBox="0 0 24 24" aria-hidden className="h-4 w-2" fill="currentColor">
         <path d="M14.5 9H17V6h-2.5C12.6 6 11 7.6 11 9.5V11H9v3h2v7h3v-7h2.4l.6-3H14v-1.2c0-.5.2-.8.5-.8Z" />
       </svg>
     )
