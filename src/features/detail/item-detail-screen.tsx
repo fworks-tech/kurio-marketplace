@@ -21,6 +21,8 @@ import {
   useToggleFavorite,
 } from "@/features/favorites/use-toggle-favorite";
 import { useSession } from "@/features/session/session-queries";
+import { PriceDisplay } from "@/shared/ui/price-display";
+import { ShoppingCartIcon } from "lucide-react";
 import { useAddToCart } from "@/features/cart/cart-queries";
 import { addGuestItem } from "@/features/cart/guest-cart";
 import { quantityLimits, stepQuantity } from "@/shared/lib/quantity";
@@ -165,10 +167,10 @@ export function ItemDetailScreen({
   );
 
   return (
-    <main className="mx-auto max-w-[1248px] px-6 pt-8 pb-8">
+    <main className="mx-auto flex min-h-[calc(100dvh-70px)] max-w-[1248px] flex-col px-6 pt-0 pb-0 lg:block lg:min-h-0 lg:pt-8 lg:pb-8">
       <nav
         aria-label="Trilha de navegação"
-        className="text-canvas text-[15px] leading-4 font-bold"
+        className="text-canvas hidden text-[15px] leading-4 font-bold lg:block"
       >
         <Link to="/" className="hover:text-highlight">
           Início
@@ -179,7 +181,118 @@ export function ItemDetailScreen({
         </Link>
       </nav>
 
-      <div className="mt-3 grid gap-8 lg:grid-cols-[573px_1fr] lg:gap-8">
+      {/* Mobile / Detalhes: 506px hero, then the sheet 114px over it, then the fixed buy bar. */}
+      <div className="lg:hidden">
+        <div className="relative -mx-6 h-[506px] pt-[66px]">
+          <img
+            src={nft.imageUrl}
+            alt={nft.title}
+            className="ml-7 h-[356px] w-[361px] rounded-[24px] object-cover"
+          />
+          <div className="absolute inset-x-0 top-[365px] flex justify-center">
+            <div className="flex h-[7px] w-[56px] items-center gap-[7px]">
+              <span className="h-[7px] w-[28px] rounded-[25px] bg-[#D28A4C]" />
+              <span className="size-[7px] rounded-full bg-[#D28A4C]" />
+              <span className="size-[7px] rounded-full bg-[#D28A4C]" />
+            </div>
+          </div>
+        </div>
+
+        <div className="bg-surface-card relative -mx-6 mt-[-114px] px-6 pt-8 pb-7">
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-canvas min-w-0 flex-1 text-[20px] leading-4 font-bold">{nft.title}</h1>
+            <Rating average={average} count={reviews.length} />
+          </div>
+          <p className="text-sand mt-3 line-clamp-4 text-sm leading-6">{nft.description}</p>
+
+          <div className="mt-6">
+            <h2 className={SECTION_LABEL}>Edição:</h2>
+            <div className="mt-2 flex flex-wrap items-center gap-1.5">
+              <span className="border-field text-canvas inline-flex h-7 items-center rounded-pill border px-2 text-sm leading-4">
+                {nft.edition}/{nft.totalEdition}
+              </span>
+              <span
+                className={cn(
+                  "inline-flex h-7 items-center rounded-pill border px-2 text-sm leading-4",
+                  soldOut
+                    ? "border-field text-text-secondary"
+                    : "border-primary text-highlight font-medium",
+                )}
+              >
+                {soldOut ? "ESGOTADA" : "ABERTA"}
+              </span>
+            </div>
+          </div>
+
+          <dl className={cn(META_LINE, "mt-8")}>
+            <div>ID do token: {formatTokenId(tokenId)}</div>
+            <div>Coleção: {collectionLabel(nft.collectionId)}</div>
+            <div>
+              Atributos: {attributes.length ? attributes.join(", ") : "—"}
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      {/* Figma `Buy Bar`: 164px bar with the 30px quantity row and a 60px pill. */}
+      <div className="bg-surface-card sticky bottom-0 z-40 mt-auto -mx-6 px-6 pt-5 pb-9 lg:hidden">
+        <div className="flex h-[30px] items-center gap-3">
+          <span className="text-sand text-[15px] leading-4 font-medium">Qtd.</span>
+          <div className="flex h-[30px] w-[75px] items-center justify-between">
+            <button
+              type="button"
+              aria-label="Diminuir quantidade"
+              disabled={limits.atMin}
+              onClick={() =>
+                setQuantity(stepQuantity(quantity, -1, 1, Math.max(1, remaining)))
+              }
+              className="bg-primary text-ink grid h-[30px] w-5 place-items-center rounded-[20px] disabled:opacity-40"
+            >
+              <MinusIcon aria-hidden className="size-[9px]" />
+            </button>
+            <span className="text-canvas w-[11px] text-center text-lg leading-4 font-medium tabular-nums">
+              {quantity}
+            </span>
+            <button
+              type="button"
+              aria-label="Aumentar quantidade"
+              disabled={limits.atMax}
+              onClick={() =>
+                setQuantity(stepQuantity(quantity, 1, 1, Math.max(1, remaining)))
+              }
+              className="bg-primary text-ink grid h-[30px] w-5 place-items-center rounded-[20px] disabled:opacity-40"
+            >
+              <PlusIcon aria-hidden className="size-[9px]" />
+            </button>
+          </div>
+          <PriceDisplay
+            value={nft.price}
+            className="text-price ml-auto text-[20px] leading-4 font-bold"
+          />
+        </div>
+
+        <div className="mt-4 flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleBuy}
+            disabled={soldOut || addToCart.isPending}
+            className="bg-primary text-ink h-[60px] w-[196px] rounded-[40px] text-base leading-5 font-bold disabled:opacity-50"
+          >
+            {soldOut ? "Esgotado" : addToCart.isPending ? "Comprando…" : "Comprar NFT"}
+          </button>
+          <button
+            type="button"
+            onClick={handleBuy}
+            aria-label={`Adicionar ${nft.title} ao carrinho`}
+            disabled={soldOut || addToCart.isPending}
+            className="grid size-[60px] place-items-center rounded-[40px] bg-[#2F1D15] disabled:opacity-50"
+          >
+            <ShoppingCartIcon aria-hidden className="size-5 text-[#B39463]" />
+          </button>
+        </div>
+      </div>
+
+      <div className="mt-3 hidden gap-8 lg:grid lg:grid-cols-[573px_1fr] lg:gap-8">
         <Gallery images={galleryImages} />
 
         <div className="flex flex-col justify-between gap-5">
