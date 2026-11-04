@@ -20,6 +20,11 @@ export default defineConfig(({ mode }) => ({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
   },
+  build: {
+    // Mapas de origem no bundle publicado: rastreabilidade de erro em produção e
+    // auditoria de best practices do Lighthouse sem expor o código-fonte ao cliente.
+    sourcemap: true
+  },
   define: {
     'process.env.MOCK_MODE': JSON.stringify(
       mode === 'mock' ? 'true' : (process.env.MOCK_MODE ?? 'false')
