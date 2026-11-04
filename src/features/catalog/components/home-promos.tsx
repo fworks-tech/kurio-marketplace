@@ -27,7 +27,7 @@ export function HomePromos() {
               src={promo.image}
               alt=""
               aria-hidden
-              className="hidden h-full w-[46%] shrink-0 rounded-[18px] object-cover sm:block"
+              className="hidden h-full w-[292px] shrink-0 rounded-[18px] object-cover sm:-ml-[5px] sm:block"
             />
             <div className="flex flex-1 flex-col items-end justify-center gap-3 px-6 py-6 text-right">
               <h3 className="text-canvas text-lg leading-6 font-bold whitespace-pre-line">{promo.title}</h3>
@@ -40,6 +40,15 @@ export function HomePromos() {
                 <ArrowRightIcon aria-hidden className="size-4" />
               </a>
             </div>
+            {/* Figma "Mask Group": two concentric rings clipped by the card. */}
+            <span
+              aria-hidden
+              className="border-primary pointer-events-none absolute -left-[199px] top-[134px] size-64 rounded-full border"
+            />
+            <span
+              aria-hidden
+              className="border-primary pointer-events-none absolute -left-[191px] top-[142px] size-64 rounded-full border-2"
+            />
           </article>
         ))}
       </div>
