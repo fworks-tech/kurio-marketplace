@@ -64,6 +64,7 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Cobertura de UI de cupom | Resolvido: `e2e/coupon-flow.spec.ts` cobre cupom válido, inexistente, expirado e remoção. |
 | Inputs no filtro de preço | Resolvido: os dois campos digitáveis não existem no frame (Price Filter = título, slider, leitura "Preço:" e Aplicar). Removidos; o painel voltou ao desenho e a suíte passou a exercitar o slider. |
 | Estado do slider de preço | Resolvido: um refetch de facetas reiniciava os punhos para os limites padrão; agora só um filtro aplicado ou limpo movimenta os controles de fora. |
+| Banner do destaque | Resolvido: a arte do painel virou link para o detalhe da obra (mesma imagem do Figma, NFT que a possui) e flutua 6px em 4,8s, parando no hover e sob `prefers-reduced-motion`. |
 | Hero navegável | Resolvido: setas de anterior/próxima, swipe no mobile e setas do teclado quando o carrossel está focado; as obras trocam com crossfade de 700ms. Controles centralizados abaixo do card, 50px abaixo da borda do hero. |
 | Imagens distintas no hero | Resolvido: Frame-136 e nft-03 eram o mesmo arquivo (distância perceptual 0,5), então o segundo slide passou a usar nft-05 e o terceiro nft-09. |
 | Camada de movimento | Resolvido: cards com elevação no hover, feedback de pressão em botões, fade de entrada das rotas e toasts entrando pela direita, tudo sob `prefers-reduced-motion`. |
