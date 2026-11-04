@@ -112,7 +112,7 @@ export function CatalogScreen({ state, onPatch, onRequireAuth }: CatalogScreenPr
         />
 
         <div className="min-w-0 flex-1">
-          <div className="mb-8 flex flex-wrap items-center justify-between gap-4 lg:h-[18px]">
+          <div className="mb-8 flex flex-wrap items-start justify-between gap-4 lg:h-[18px]">
             <CatalogTabs value={state.tab} options={TABS} onChange={(tab) => onPatch({ tab, page: 1 })} />
             <SortSelect
               value={state.sort}

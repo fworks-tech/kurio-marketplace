@@ -80,7 +80,7 @@ function HomeRoute() {
   const { openAuth } = useAuthDialog()
 
   const patch = (partial: Partial<CatalogState>) =>
-    navigate({ search: (prev) => toSearch({ ...toState(prev), ...partial }) })
+    navigate({ search: (prev) => toSearch({ ...toState(prev), ...partial }), resetScroll: false })
 
   const requireAuth = () => openAuth('login')
 
