@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { signIn } from './helpers'
+import { addToCart, signIn } from './helpers'
 
 /**
  * Pixel checks against the Figma mobile frames (414x896): home search row, the
@@ -94,8 +94,7 @@ test.describe('layout mobile conforme Figma', () => {
 
   test('o pagamento mantém o CTA fixo clicável acima da dobra', async ({ page }) => {
     await signIn(page)
-    await page.goto('/nfts/nft-003')
-    await page.getByRole('button', { name: /COMPRAR|Comprar/ }).first().click()
+    await addToCart(page, 'nft-003')
     await page.goto('/payment')
     const cta = page.getByRole('button', { name: 'Confirmar compra' }).first()
     await expect(cta).toBeVisible()

@@ -7,7 +7,13 @@ export async function signIn(page: Page) {
   await page.goto('/login')
   await page.locator('#login-usuario').fill(USER.email)
   await page.locator('#login-senha').fill(USER.password)
+  // Wait for the login round-trip: the mocked session exists only once it resolves,
+  // and user-scoped requests fired earlier would come back unauthorized.
+  const login = page.waitForResponse(
+    (response) => response.url().includes('/api/auth/login') && response.status() === 200
+  )
   await page.getByRole('dialog').getByRole('button', { name: 'Entrar' }).click()
+  await login
   await expect(page).toHaveURL(/\/$/)
 }
 
