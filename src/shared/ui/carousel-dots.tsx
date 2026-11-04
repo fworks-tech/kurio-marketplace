@@ -26,6 +26,9 @@ export function CarouselDots({
   if (count < 2) return null;
 
   const dot = size === "sm" ? "size-2" : "size-3";
+  // Figma draws the three hero dots as identical solid circles, with no hollow
+  // "inactive" state; only the wider collection carousel keeps outlines.
+  const solid = size === "sm";
 
   return (
     <div
@@ -45,7 +48,7 @@ export function CarouselDots({
             className={cn(
               dot,
               "rounded-full border-[1.3px] transition-colors focus-visible:ring-highlight focus-visible:outline-none focus-visible:ring-2",
-              current
+              solid || current
                 ? "bg-primary border-primary"
                 : "border-primary hover:bg-primary/40",
             )}
