@@ -1,26 +1,28 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
-import { EyeIcon, FlagIcon, GemIcon, HeartIcon } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { PriceDisplay } from '@/shared/ui/price-display'
+import { HeartIcon, Link2Icon, MessageCircleIcon, StarIcon } from 'lucide-react'
 import { notify } from '@/shared/ui/toast'
 import { ErrorState } from '@/shared/ui/error-state'
 import { Skeleton } from '@/shared/ui/skeleton'
 import { Gallery } from './components/gallery'
 import { DetailTabs } from './components/detail-tabs'
-import { QuantityStepper } from './components/quantity-stepper'
-import { ShareActions } from './components/share-actions'
+import { ReviewList } from './components/review-list'
 import { NftGrid } from '@/features/catalog/components/nft-grid'
 import { useFavorites, useToggleFavorite } from '@/features/favorites/use-toggle-favorite'
 import { useSession } from '@/features/session/session-queries'
 import { useAddToCart } from '@/features/cart/cart-queries'
 import { addGuestItem } from '@/features/cart/guest-cart'
+import { quantityLimits, stepQuantity } from '@/shared/lib/quantity'
 import { remainingEditions, useNftDetail, useRelatedNfts } from './detail-queries'
+import { cn } from '@/lib/utils'
 
 interface ItemDetailScreenProps {
   nftId: string
   onRequireAuth: () => void
 }
+
+const SECTION_LABEL = 'text-canvas text-[15px] leading-4 font-bold'
+const META_LINE = 'text-sand text-[15px] leading-[19.8px]'
 
 export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps) {
   const detail = useNftDetail(nftId)
@@ -30,6 +32,13 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
   const toggleFavorite = useToggleFavorite(nftId)
   const addToCart = useAddToCart()
   const [quantity, setQuantity] = useState(1)
+  const [tab, setTab] = useState('detalhes')
+
+  const reviews = detail.data?.reviews ?? []
+  const average = useMemo(
+    () => (reviews.length ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length : 0),
+    [reviews]
+  )
 
   if (detail.isLoading) return <DetailSkeleton />
   if (detail.isError) {
@@ -63,7 +72,7 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
     toggleFavorite.mutate(isFavorite)
   }
 
-  const handleAddToCart = () => {
+  const handleBuy = () => {
     if (!session) {
       addGuestItem(nftId, quantity)
       notify.success('Salvo no carrinho. Entre para finalizar a compra.')
@@ -75,180 +84,285 @@ export function ItemDetailScreen({ nftId, onRequireAuth }: ItemDetailScreenProps
     )
   }
 
-  const tabs = [
-    { value: 'descricao', label: 'Descrição', content: <p className="text-sm">{nft.description}</p> },
-    {
-      value: 'atributos',
-      label: 'Atributos',
-      content: nft.attributes?.length ? (
-        <dl className="grid grid-cols-2 gap-3">
-          {nft.attributes.map((attr) => (
-            <div key={attr.traitType} className="bg-surface-raised rounded-card p-3">
-              <dt className="text-text-secondary text-xs uppercase">{attr.traitType}</dt>
-              <dd className="mt-1 text-sm font-semibold">{String(attr.value)}</dd>
-            </div>
-          ))}
-        </dl>
-      ) : (
-        <p className="text-text-secondary text-sm">Sem atributos para este NFT.</p>
-      )
-    }
-  ]
+  const handleShare = () => {
+    void navigator.clipboard
+      .writeText(window.location.href)
+      .then(() => notify.success('Link copiado.'))
+      .catch(() => notify.error('Não foi possível copiar o link.'))
+  }
+
+  // Figma Gallery/Thumbnails: quatro miniaturas de 100px; o mock entrega uma arte por NFT.
+  const galleryImages = Array.from({ length: 4 }, (_, index) => ({
+    src: nft.imageUrl,
+    alt: index === 0 ? nft.title : `${nft.title} — imagem ${index + 1}`
+  }))
+
+  const tokenId = `#${nft.id.replace(/\D/g, '').slice(-4).padStart(4, '0')}`
+  const attributes = (nft.attributes ?? []).map((attribute) => String(attribute.value))
+  const limits = quantityLimits(quantity, 1, Math.max(1, remaining))
+
+  const detailsContent = (
+    <div className="flex flex-col gap-3">
+      <p className="text-text-secondary max-w-[1200px] text-sm leading-6">{nft.description}</p>
+      <dl className="text-sm leading-6">
+        <dt className={cn(SECTION_LABEL, 'text-sm leading-6')}>Rede:</dt>
+        <dd className="text-text-secondary">
+          Cunhado na {nft.network ?? 'Ethereum'} com procedência imutável e metadados armazenados no
+          IPFS.
+        </dd>
+        <dt className={cn(SECTION_LABEL, 'mt-3 text-sm leading-6')}>Contrato:</dt>
+        <dd className="text-text-secondary">
+          Direitos autorais do criador: {nft.royalty}% nas vendas secundárias, pagos automaticamente
+          pelos marketplaces compatíveis.
+        </dd>
+        <dt className={cn(SECTION_LABEL, 'mt-3 text-sm leading-6')}>Direitos autorais:</dt>
+        <dd className="text-text-secondary">
+          0x7A42…19E8 • Contrato inteligente ERC-721 verificado.
+        </dd>
+      </dl>
+    </div>
+  )
 
   return (
-    <main className="mx-auto max-w-[1248px] px-4 py-8 sm:px-6">
-      <Link to="/" className="text-text-secondary mb-6 inline-block text-sm hover:underline">
-        ← Voltar ao mercado
-      </Link>
-      <div className="grid gap-8 lg:grid-cols-[573px_1fr]">
-        <Gallery images={[{ src: nft.imageUrl, alt: nft.title }]} />
+    <main className="mx-auto max-w-[1248px] px-4 pt-8 pb-8 sm:px-6">
+      <nav aria-label="Trilha de navegação" className="text-canvas text-[15px] leading-4 font-bold">
+        <Link to="/" className="hover:text-highlight">
+          Início
+        </Link>
+        <span className="text-text-secondary"> / </span>
+        <Link to="/" className="hover:text-highlight">
+          Mercado
+        </Link>
+      </nav>
 
-        <div className="space-y-5">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <h1 className="text-[28px] leading-[37px] font-bold">{nft.title}</h1>
-              {nft.collectionId ? (
-                <p className="text-text-secondary mt-1 text-sm">{nft.collectionId}</p>
-              ) : null}
+      <div className="mt-3 grid gap-8 lg:grid-cols-[573px_1fr] lg:gap-8">
+        <Gallery images={galleryImages} />
+
+        <div className="flex flex-col justify-between gap-5">
+          <div className="flex flex-col gap-3">
+            <h1 className="text-canvas text-[28px] leading-[37px] font-bold">{nft.title}</h1>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <p className="text-highlight text-[22px] leading-4 font-bold">{nft.price} ETH</p>
+              <Rating average={average} count={reviews.length} />
             </div>
-            <button
-              type="button"
-              aria-pressed={isFavorite}
-              aria-label={isFavorite ? 'Remover dos favoritos' : 'Favoritar'}
-              onClick={handleFavorite}
-              className="bg-surface-card hover:bg-surface-raised rounded-full border border-white/10 p-2"
-            >
-              <HeartIcon className={isFavorite ? 'fill-highlight text-highlight size-5' : 'size-5'} />
-            </button>
+            <div className="border-primary/30 border-t-[0.3px]" />
           </div>
 
-          <div className="bg-surface-card flex flex-wrap items-end justify-between gap-4 rounded-card border border-white/10 p-4">
-            <div>
-              <p className="text-text-secondary text-xs">Preço</p>
-              <PriceDisplay value={nft.price} size="lg" />
-            </div>
-            <p className="text-text-secondary text-sm">
-              {soldOut ? (
-                <span className="font-semibold">Esgotado</span>
-              ) : (
-                <>
-                  <span className="font-semibold">{remaining}</span> de {nft.totalEdition} edições
-                </>
-              )}
-            </p>
+          <div className="flex flex-col gap-3">
+            <h2 className={SECTION_LABEL}>Sobre este NFT:</h2>
+            <p className="text-text-secondary text-sm leading-6">{nft.description}</p>
           </div>
 
-          <StatsRow
-            views={nft.stats.viewCount}
-            bids={nft.stats.bidCount}
-            floorPrice={nft.stats.floorPrice}
-            royalty={nft.royalty}
-          />
-
-          <DetailTabs tabs={tabs} value="descricao" onChange={() => undefined} />
-
-          {!soldOut ? (
-            <div className="flex flex-wrap items-center gap-3">
-              <QuantityStepper value={quantity} max={remaining} onChange={setQuantity} />
-              <Button onClick={handleAddToCart} disabled={addToCart.isPending}>
-                {addToCart.isPending ? 'Adicionando…' : 'Adicionar ao carrinho'}
-              </Button>
+          <div className="flex flex-col gap-3">
+            <h2 className={SECTION_LABEL}>Edição:</h2>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="border-field text-canvas inline-flex h-7 items-center rounded-pill border px-2 text-sm leading-4">
+                {nft.edition}/{nft.totalEdition}
+              </span>
+              <span
+                className={cn(
+                  'inline-flex h-7 items-center rounded-pill border px-2 text-sm leading-4',
+                  soldOut
+                    ? 'border-field text-text-secondary'
+                    : 'border-primary text-highlight font-medium'
+                )}
+              >
+                {soldOut ? 'ESGOTADA' : 'ABERTA'}
+              </span>
             </div>
-          ) : null}
+          </div>
 
-          <ShareActions
-            onCopyLink={() => {
-              void navigator.clipboard
-                .writeText(window.location.href)
-                .then(() => notify.success('Link copiado.'))
-                .catch(() => notify.error('Não foi possível copiar o link.'))
-            }}
-          />
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div className="border-white/15 flex h-[50px] w-[103px] items-center justify-between rounded-[10px] border px-2">
+              <button
+                type="button"
+                aria-label="Diminuir quantidade"
+                disabled={limits.atMin}
+                onClick={() => setQuantity(stepQuantity(quantity, -1, 1, Math.max(1, remaining)))}
+                className="text-canvas grid size-7 place-items-center disabled:opacity-40"
+              >
+                −
+              </button>
+              <span className="text-canvas text-[15px] tabular-nums">
+                {String(quantity).padStart(2, '0')}
+              </span>
+              <button
+                type="button"
+                aria-label="Aumentar quantidade"
+                disabled={limits.atMax}
+                onClick={() => setQuantity(stepQuantity(quantity, 1, 1, Math.max(1, remaining)))}
+                className="text-canvas grid size-7 place-items-center disabled:opacity-40"
+              >
+                +
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={handleBuy}
+                disabled={soldOut || addToCart.isPending}
+                className="bg-primary text-ink h-10 w-[130px] rounded-md text-sm leading-5 font-bold disabled:opacity-50"
+              >
+                {soldOut ? 'ESGOTADO' : addToCart.isPending ? 'COMPRANDO…' : 'COMPRAR'}
+              </button>
+              <button
+                type="button"
+                aria-pressed={isFavorite}
+                onClick={handleFavorite}
+                className="border-primary text-highlight inline-flex h-10 w-[130px] items-center justify-center gap-2 rounded-md border text-sm leading-5 font-medium"
+              >
+                <HeartIcon aria-hidden className={cn('size-5', isFavorite && 'fill-highlight')} />
+                Favoritar
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-3">
+            <dl className={META_LINE}>
+              <div>ID do token: {tokenId}</div>
+              <div>Coleção: {collectionLabel(nft.collectionId)}</div>
+              <div>Atributos: {attributes.length ? attributes.join(', ') : '—'}</div>
+            </dl>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className={SECTION_LABEL}>Compartilhar este NFT:</span>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(
+                  typeof window === 'undefined' ? '' : window.location.href
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Compartilhar no LinkedIn"
+                className="text-canvas hover:text-highlight"
+              >
+                <LinkedInMark />
+              </a>
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Copiar link do NFT"
+                className="text-canvas hover:text-highlight"
+              >
+                <MessageCircleIcon aria-hidden className="size-[18px]" />
+              </button>
+              <a
+                href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(
+                  typeof window === 'undefined' ? '' : window.location.href
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Compartilhar no Twitter"
+                className="text-canvas hover:text-highlight"
+              >
+                <TwitterMark />
+              </a>
+              <button
+                type="button"
+                onClick={handleShare}
+                aria-label="Copiar link do NFT"
+                className="text-canvas hover:text-highlight ml-1"
+              >
+                <Link2Icon aria-hidden className="size-4" />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
       <section aria-labelledby="detalhes-heading" className="mt-12">
-        <h2 id="detalhes-heading" className="text-primary text-[17px] leading-4 font-bold">
+        <h2 id="detalhes-heading" className="sr-only">
           Detalhes do NFT
         </h2>
-        <p className="text-sandish mt-4 max-w-[1200px] text-sm leading-6">{nft.description}</p>
-        <dl className="mt-4 text-sm leading-6">
-          <dt className="text-canvas font-bold">Rede:</dt>
-          <dd className="text-sandish">
-            Cunhado na Ethereum com procedência imutável e metadados armazenados no IPFS.
-          </dd>
-          <dt className="text-canvas font-bold">Contrato:</dt>
-          <dd className="text-sandish">
-            Royalty do criador: {nft.royalty}% nas vendas secundárias, pago automaticamente pelos
-            marketplaces compatíveis.
-          </dd>
-          <dt className="text-canvas font-bold">Direitos autorais:</dt>
-          <dd className="text-sandish">Contrato inteligente ERC-721 verificado.</dd>
-        </dl>
+        <DetailTabs
+          value={tab}
+          onChange={setTab}
+          tabs={[
+            { value: 'detalhes', label: 'Detalhes do NFT', content: detailsContent },
+            {
+              value: 'avaliacoes',
+              label: `Avaliações de colecionadores (${reviews.length})`,
+              content: <ReviewList reviews={reviews} />
+            }
+          ]}
+        />
       </section>
 
       {related.length > 0 ? (
         <section className="mt-12">
-          <h2 className="text-primary border-primary border-b pb-4 text-[17px] leading-4 font-bold">
-            Mais desta coleção
-          </h2>
+          <h2 className="text-highlight text-[17px] leading-4 font-bold">Mais desta coleção</h2>
+          <div className="border-primary/30 mt-3 border-t-[0.3px]" />
           <NftGrid items={related} variant="compact" className="mt-8" />
-          <div className="mt-4 flex justify-center gap-2" aria-hidden>
-            <span className="bg-primary size-3 rounded-full" />
-            <span className="bg-primary/50 size-3 rounded-full" />
-            <span className="bg-primary/50 size-3 rounded-full" />
-          </div>
         </section>
       ) : null}
     </main>
   )
 }
 
-function StatsRow({
-  views,
-  bids,
-  floorPrice,
-  royalty
-}: {
-  views: number
-  bids: number
-  floorPrice: string
-  royalty: number
-}) {
-  const cells = [
-    { icon: EyeIcon, label: 'Visualizações', value: views.toLocaleString('pt-BR') },
-    { icon: FlagIcon, label: 'Lances', value: bids.toLocaleString('pt-BR') },
-    { icon: GemIcon, label: 'Preço mínimo', value: `${floorPrice} ETH` },
-    { icon: GemIcon, label: 'Royalties', value: `${royalty}%` }
-  ]
+/** O contrato devolve o id da coleção; a tela mostra o rótulo legível (`arte-digital` → `Arte Digital`). */
+function collectionLabel(collectionId?: string): string {
+  if (!collectionId) return '—'
+  return collectionId
+    .split(/[-_]/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ')
+}
+
+/** Marcas sociais: o lucide não distribui logos de terceiros, então vão como SVG. */
+function LinkedInMark() {
   return (
-    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-      {cells.map((cell) => (
-        <div key={cell.label} className="bg-surface-raised rounded-card p-3">
-          <dt className="text-text-secondary flex items-center gap-1 text-xs">
-            <cell.icon aria-hidden className="size-3.5" />
-            {cell.label}
-          </dt>
-          <dd className="mt-1 text-sm font-semibold tabular-nums">{cell.value}</dd>
+    <svg viewBox="0 0 24 24" aria-hidden className="size-[15px]" fill="currentColor">
+      <path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3V9Zm6 0h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.5 4.78 5.75V21h-4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.16 1.46-2.16 2.96V21H9V9Z" />
+    </svg>
+  )
+}
+
+function TwitterMark() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden className="size-4" fill="currentColor">
+      <path d="M22 5.8c-.7.3-1.5.6-2.3.7.8-.5 1.5-1.3 1.8-2.3-.8.5-1.7.8-2.6 1A4 4 0 0 0 12 9.2a11.4 11.4 0 0 1-8.3-4.2 4 4 0 0 0 1.2 5.4c-.6 0-1.2-.2-1.8-.5a4 4 0 0 0 3.2 4 4 4 0 0 1-1.8.1 4 4 0 0 0 3.7 2.8A8 8 0 0 1 2 18.6 11.3 11.3 0 0 0 8.2 20c7.5 0 11.6-6.2 11.6-11.6v-.5c.8-.6 1.5-1.3 2.2-2.1Z" />
+    </svg>
+  )
+}
+
+/** Figma `Frame 40`: cinco estrelas de 15px e a contagem em 15px. */
+function Rating({ average, count }: { average: number; count: number }) {
+  return (
+    <div className="flex items-center gap-1">
+      <span className="flex items-center gap-1" aria-hidden>
+        {Array.from({ length: 5 }, (_, index) => (
+          <StarIcon
+            key={index}
+            className={cn(
+              'size-[15px]',
+              index < Math.round(average) ? 'fill-primary text-primary' : 'fill-sand text-sand'
+            )}
+          />
+        ))}
+      </span>
+      <span className="text-canvas text-[15px] leading-[19.8px]">
+        {count} {count === 1 ? 'avaliação de colecionador' : 'avaliações de colecionadores'}
+      </span>
+    </div>
+  )
+}
+
+function DetailSkeleton() {
+  return (
+    <Shell>
+      <div className="grid gap-8 lg:grid-cols-[573px_1fr]">
+        <Skeleton className="aspect-square w-full max-w-[444px]" label="Carregando galeria" />
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-9 w-2/3" label="Carregando título" />
+          <Skeleton className="h-6 w-40" label="Carregando preço" />
+          <Skeleton className="h-24 w-full" label="Carregando descrição" />
+          <Skeleton className="h-10 w-64" label="Carregando ações" />
         </div>
-      ))}
-    </dl>
+      </div>
+    </Shell>
   )
 }
 
 function Shell({ children }: { children: React.ReactNode }) {
   return <main className="mx-auto max-w-[1248px] px-4 py-8 sm:px-6">{children}</main>
-}
-
-function DetailSkeleton() {
-  return (
-    <main className="mx-auto grid max-w-[1248px] gap-8 px-4 py-8 sm:px-6 lg:grid-cols-2">
-      <Skeleton className="aspect-square w-full rounded-card" label="Carregando imagem" />
-      <div className="space-y-4">
-        <Skeleton className="h-8 w-2/3" label="Carregando título" />
-        <Skeleton className="h-16 w-full" label="Carregando preço" />
-        <Skeleton className="h-24 w-full" label="Carregando atributos" />
-      </div>
-    </main>
-  )
 }

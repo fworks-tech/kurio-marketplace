@@ -20,7 +20,7 @@ export function useRelatedNfts(excludeId: string): CatalogNft[] {
     () =>
       (list.data?.data ?? [])
         .filter((nft) => nft.id !== excludeId)
-        .slice(0, 4)
+        .slice(0, 5)
         .map(toCatalogNft),
     [list.data, excludeId]
   )
