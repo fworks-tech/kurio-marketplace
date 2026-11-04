@@ -20,13 +20,24 @@ test.describe('fluxo de compra', () => {
     await connectWallet(page)
     await page.getByRole('button', { name: 'Confirmar compra' }).click()
 
-    // The mock answers pending and the realtime channel promotes it to confirmed.
-    await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-      /Compra realizada!|Pedido em processamento/i,
-      { timeout: 15_000 }
-    )
+    // The mock answers pending; the settlement event promotes the order on screen.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Pedido em processamento/i)
     await expect(page.getByText(/^Pedido #/)).toBeVisible()
-    await expect(page.getByText(/pendente|confirmad|concluíd/i).first()).toBeVisible()
+
+    const orderId = new URL(page.url()).pathname.split('/').pop() ?? ''
+    await page.evaluate(async (id) => {
+      await fetch('/api/__simulate/order-updated', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ orderId: id, status: 'confirmed' })
+      })
+    }, orderId)
+
+    // No reload: the socket event alone has to promote the confirmation.
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(/Compra realizada!/i, {
+      timeout: 15_000
+    })
+    await expect(page.getByText(/confirmad|concluíd/i).first()).toBeVisible()
   })
 
   test('carrinho vazio bloqueia o checkout', async ({ page }) => {

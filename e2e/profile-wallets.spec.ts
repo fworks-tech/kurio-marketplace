@@ -13,7 +13,11 @@ test.describe('perfil do colecionador', () => {
     const field = form.getByLabel('Nome de exibição', { exact: false }).first()
     const updated = 'Alice Colecionadora'
     await field.fill(updated)
+    const saved = page.waitForResponse(
+      (response) => /\/api\/profile$/.test(response.url()) && response.request().method() === 'PATCH'
+    )
     await form.getByRole('button', { name: 'Salvar' }).first().click()
+    await saved
 
     await expect(page.getByText(/atualizad|salv/i).first()).toBeVisible()
 
