@@ -60,16 +60,33 @@ test.describe('carteiras', () => {
 })
 
 test.describe('sessão', () => {
-  test('sair encerra a sessão e protege as rotas privadas', async ({ page, viewport }) => {
+  test('sair encerra a sessão na hora, sem recarregar', async ({ page, viewport }) => {
     test.skip((viewport?.width ?? 0) < 1024, 'o menu de conta só aparece no desktop')
     await signIn(page)
-    await page.getByRole('button', { name: 'Sair' }).click()
-    await page.waitForTimeout(600)
-    await page.reload()
+    await expect(page.getByRole('link', { name: 'alice_crypto' })).toBeVisible()
 
-    await expect(page.getByRole('link', { name: 'alice_crypto' })).toHaveCount(0, { timeout: 10_000 })
+    await page.getByRole('button', { name: 'Sair' }).click()
+
+    // The header has to flip on its own: a reload used to hide this regression.
+    await expect(page.getByRole('button', { name: 'Entrar' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Sair' })).toHaveCount(0)
+    await expect(page.getByRole('link', { name: 'alice_crypto' })).toHaveCount(0)
+
     await page.goto('/profile')
     await expect(page).toHaveURL(/\/login/)
     await expect(page.getByRole('heading', { level: 1, name: 'Perfil do colecionador' })).toHaveCount(0)
+  })
+
+  test('sair pelo perfil devolve o visitante para a home', async ({ page }) => {
+    await signIn(page)
+    await page.goto('/profile')
+    await expect(page.getByRole('heading', { level: 1, name: 'Perfil do colecionador' })).toBeVisible()
+
+    await page.getByRole('button', { name: 'Sair' }).first().click()
+
+    await expect(page).toHaveURL(/\/$/)
+    // Desktop keeps "Entrar" in the header, mobile only inside the drawer menu.
+    await expect(page.getByRole('button', { name: 'Sair' })).toHaveCount(0)
+    await expect(page.getByRole('link', { name: 'alice_crypto' })).toHaveCount(0)
   })
 })
