@@ -134,7 +134,7 @@ Regra de dependência: `features` → `shared` → contratos; nenhum componente 
 - **Typecheck:** um único `tsconfig.json` cobre `src` e `e2e`.
 - **Lint:** ESLint com TypeScript, `unused-imports` e `no-console` como aviso.
 - **Testes:** Vitest (unidade, contrato REST, estado, socket) e Playwright (smoke,
-  `@axe-core/playwright` e baseline visual versionado).
+  `@axe-core/playwright` e regressão visual pronta para baselines por plataforma).
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, metas
   Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90.
 - **CI:** `.github/workflows/ci.yml` roda typecheck, lint, testes, build, E2E e

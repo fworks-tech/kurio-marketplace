@@ -250,8 +250,9 @@ margens de artboard).
   idempotência, chave malformada, propriedade de pedido, hash de senha, limite de
   quantidade).
 - **Playwright:** smoke (navegação, deep link, guard de rota, foco por teclado),
-  acessibilidade com `@axe-core/playwright` e baseline visual versionada nos viewports
-  390/768/1440, com trace e screenshot em falha e movimento desligado.
+  acessibilidade com `@axe-core/playwright` e regressão visual preparada para baselines
+  por plataforma (o teste é ignorado enquanto não houver baseline commitada, para não
+  gerar falso negativo em CI), com trace e screenshot em falha e movimento desligado.
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, com LCP, CLS e
   TBT, gated em 90 / 95 / 95 / 90.
 - **CI:** `.github/workflows/ci.yml` instala pelo lockfile e roda typecheck, lint, testes,
