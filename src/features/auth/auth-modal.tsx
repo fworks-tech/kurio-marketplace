@@ -146,7 +146,7 @@ function LoginForm({ onAuthenticated }: { onAuthenticated: () => void }) {
 
   return (
     <form
-      className="space-y-3 px-6 pt-6 sm:px-20 [&_input]:h-10 [&_input]:rounded-[5px] [&_input]:px-4 [&_input]:text-sm"
+      className="space-y-3 px-7 pt-6 sm:px-20 [&_input]:h-[50px] [&_input]:rounded-[10px] [&_input]:px-4 [&_input]:text-sm sm:[&_input]:h-10 sm:[&_input]:rounded-[5px]"
       noValidate
       onSubmit={(event) => {
         event.preventDefault()
@@ -185,7 +185,7 @@ function LoginForm({ onAuthenticated }: { onAuthenticated: () => void }) {
       </div>
       <Button
         type="submit"
-        className="mt-3 h-[45px] w-full rounded-[5px] text-base font-bold"
+        className="mt-3 h-[60px] w-full rounded-[10px] text-base font-bold sm:h-[45px] sm:rounded-[5px]"
         disabled={login.isPending}
       >
         {login.isPending ? 'Entrando…' : 'Entrar'}
@@ -218,7 +218,7 @@ function SignupForm({ onAuthenticated }: { onAuthenticated: () => void }) {
 
   return (
     <form
-      className="space-y-3 px-6 pt-6 sm:px-20 [&_input]:h-10 [&_input]:rounded-[5px] [&_input]:px-4 [&_input]:text-sm"
+      className="space-y-3 px-7 pt-6 sm:px-20 [&_input]:h-[50px] [&_input]:rounded-[10px] [&_input]:px-4 [&_input]:text-sm sm:[&_input]:h-10 sm:[&_input]:rounded-[5px]"
       noValidate
       onSubmit={(event) => {
         event.preventDefault()
@@ -274,7 +274,7 @@ function SignupForm({ onAuthenticated }: { onAuthenticated: () => void }) {
       ) : null}
       <Button
         type="submit"
-        className="mt-3 h-[45px] w-full rounded-[5px] text-base font-bold"
+        className="mt-3 h-[60px] w-full rounded-[10px] text-base font-bold sm:h-[45px] sm:rounded-[5px]"
         disabled={signup.isPending}
       >
         {signup.isPending ? 'Criando conta…' : 'Criar conta'}
