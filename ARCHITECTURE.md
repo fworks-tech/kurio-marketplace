@@ -255,8 +255,8 @@ margens de artboard).
   gerar falso negativo em CI), com trace e screenshot em falha e movimento desligado.
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, com LCP, CLS e
   TBT, gated em 90 / 95 / 95 / 90.
-- **CI:** `.github/workflows/ci.yml` instala pelo lockfile e roda typecheck, lint, testes,
-  build e E2E, com upload do relatório; job separado para Lighthouse.
+- **Pipeline:** `npm ci` instala pelo lockfile; typecheck, lint, testes, build e E2E rodam
+  na mesma ordem em qualquer runner, com relatório HTML e traces das falhas do Playwright.
 
 ## 15. Limitações conhecidas
 

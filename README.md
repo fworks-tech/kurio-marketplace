@@ -137,8 +137,9 @@ Regra de dependência: `features` → `shared` → contratos; nenhum componente 
   `@axe-core/playwright` e regressão visual pronta para baselines por plataforma).
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, metas
   Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90.
-- **CI:** `.github/workflows/ci.yml` roda typecheck, lint, testes, build, E2E e
-  Lighthouse a partir de um checkout limpo.
+- **Pipeline:** a partir de um checkout limpo, `npm ci` → `npm run typecheck` →
+  `npm run lint` → `npm test` → `npm run build` → `npm run test:e2e`; qualquer runner
+  executa a mesma sequência.
 
 ## Deploy
 
