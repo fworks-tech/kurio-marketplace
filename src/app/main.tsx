@@ -28,7 +28,7 @@ async function bootstrap(): Promise<void> {
       <QueryClientProvider client={queryClient}>
         <LiveRegionProvider>
           <RouterProvider router={router} />
-          <Toaster position="top-center" />
+          <Toaster />
         </LiveRegionProvider>
       </QueryClientProvider>
     </StrictMode>
