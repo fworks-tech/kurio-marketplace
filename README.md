@@ -87,7 +87,7 @@ query string → `window.__mocks`.
 ```js
 __mocks.setScenario('payment-rejected') // ativa um cenário
 __mocks.scenario()                      // nome ativo
-__mocks.reset()                         // volta ao baseline (equivalente ao mocks:reset)
+__mocks.reset()                         // volta ao baseline
 __mocks.describe()                      // inspeciona o estado do mock
 ```
 
