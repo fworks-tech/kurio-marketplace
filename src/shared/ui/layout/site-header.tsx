@@ -17,7 +17,7 @@ type NavKey = 'inicio' | 'mercado' | 'criadores' | 'aprenda'
 
 const NAV_ITEMS: ReadonlyArray<{ key: NavKey; label: string; to: '/' | null }> = [
   { key: 'inicio', label: 'Início', to: '/' },
-  { key: 'mercado', label: 'Mercado', to: '/' },
+  { key: 'mercado', label: 'Mercado', to: null },
   { key: 'criadores', label: 'Criadores', to: null },
   { key: 'aprenda', label: 'Aprenda', to: null }
 ]

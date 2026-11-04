@@ -67,3 +67,17 @@ test('unauthenticated visit to a protected route redirects to login with return 
   await expect(page).toHaveURL(/\/login\?redirect=%2Fpayment$/)
   await expect(page.getByRole('heading', { name: 'Entrar' })).toBeVisible()
 })
+
+test('os itens sem destino do menu não navegam', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium-desktop', 'desktop nav only')
+  await page.goto('/')
+  const nav = page.getByRole('navigation', { name: 'Navegação principal' })
+  for (const label of ['Mercado', 'Criadores', 'Aprenda']) {
+    await expect(nav.getByRole('link', { name: label })).toHaveCount(0)
+    // O rótulo vem seguido de "(em breve)" para leitores de tela.
+    const item = nav.locator('span[aria-disabled="true"]').filter({ hasText: label }).first()
+    await expect(item).toHaveAttribute('aria-disabled', 'true')
+  }
+  // Início continua levando para a home.
+  await expect(nav.getByRole('link', { name: 'Início' })).toHaveAttribute('href', '/')
+})
