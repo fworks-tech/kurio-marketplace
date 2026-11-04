@@ -206,7 +206,7 @@ consomem tokens (`bg-surface-card`, `text-price`, `text-title`), nunca hex cru.
 | Build | Vite + `--mode mock` | Paridade dev/prod e demo publicada sem backend. |
 | Formulários | react-hook-form + Zod | Performance não controlada e um schema por formulário. |
 | Validação de runtime | Zod em toda borda (API, search params, forms) | Payload inválido falha na borda, não no componente. |
-| Deploy | Vercel com rewrite de SPA | Acesso direto e refresh em qualquer rota. |
+| Deploy | Vercel (https://kurio-marketplace-theta.vercel.app) com rewrite de SPA | Acesso direto e refresh em qualquer rota. |
 | Cenários | env + query + `window.__mocks` | Reprodutível pela URL, persistente e ajustável em execução. |
 | `mocks:reset` | `__mocks.reset()` na aplicação | O estado vive no `localStorage` do navegador, não em um processo CLI. |
 | Copy | Português, conforme o enunciado | Os textos em inglês do Figma são placeholder. |
@@ -254,7 +254,9 @@ margens de artboard).
   por plataforma (o teste é ignorado enquanto não houver baseline commitada, para não
   gerar falso negativo em CI), com trace e screenshot em falha e movimento desligado.
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, com LCP, CLS e
-  TBT, gated em 90 / 95 / 95 / 90.
+  TBT, gated em 90 / 95 / 95 / 90. Última execução contra a URL publicada
+  (`npm run lighthouse:prod`): Performance 99–100, Acessibilidade 97–100, Boas práticas
+  96, SEO 100, LCP 0,6–0,7 s, CLS 0; relatórios em `docs/lighthouse`.
 - **Pipeline:** `npm ci` instala pelo lockfile; typecheck, lint, testes, build e E2E rodam
   na mesma ordem em qualquer runner, com relatório HTML e traces das falhas do Playwright.
 

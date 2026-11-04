@@ -137,13 +137,18 @@ Regra de dependência: `features` → `shared` → contratos; nenhum componente 
   `@axe-core/playwright` e regressão visual pronta para baselines por plataforma).
 - **Lighthouse CI:** 3 execuções por página e perfil, mediana publicada, metas
   Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95, SEO ≥ 90.
+- **Lighthouse na URL publicada** (`npm run lighthouse:prod`, mediana de 3 execuções por
+  página, preset desktop): Performance 99–100, Acessibilidade 97–100, Boas práticas 96,
+  SEO 100; LCP 0,6–0,7 s, CLS 0 e TBT ≤ 8 ms. Relatórios em
+  [docs/lighthouse](docs/lighthouse).
 - **Pipeline:** a partir de um checkout limpo, `npm ci` → `npm run typecheck` →
   `npm run lint` → `npm test` → `npm run build` → `npm run test:e2e`; qualquer runner
   executa a mesma sequência.
 
 ## Deploy
 
-Vercel por padrão, com fallback de SPA em [vercel.json](vercel.json) (`rewrites` para
+Publicado em **https://kurio-marketplace-theta.vercel.app** (Vercel, build com mocks e
+tempo real ativos). Vercel por padrão, com fallback de SPA em [vercel.json](vercel.json) (`rewrites` para
 `index.html`), garantindo acesso direto e refresh em qualquer rota. O build publicado
 contém os mocks e o transporte de tempo real. Netlify ou Cloudflare Pages funcionam
 com o mesmo `dist` e rewrite equivalente.

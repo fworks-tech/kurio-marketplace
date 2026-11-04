@@ -62,4 +62,20 @@ tanto em `npm run dev:mocks` quanto no `preview` do build de produção.
 | Avaliações no detalhe | Sem endpoint de reviews no contrato; a seção não é renderizada de propósito. |
 | Campos de perfil no checkout | Dependem de mudança em `POST /orders` para viajar no pedido. |
 | Cobertura de UI de cupom | O contrato de cupom tem teste; o fluxo de digitação na tela não. |
-| Relatório Lighthouse publicado | A configuração está versionada; falta anexar os relatórios da última execução. |
+
+## Verificação na URL publicada
+
+Auditoria feita em https://kurio-marketplace-theta.vercel.app, com o build de produção
+(mocks e tempo real ativos).
+
+| Verificação | Resultado |
+| --- | --- |
+| Rotas com acesso direto | `/`, `/nfts/nft-001`, `/profile`, `/wallets`, `/payment` respondem 200 e o refresh mantém a rota. |
+| Guarda de sessão | `/profile` e `/wallets` sem sessão redirecionam para `/login?redirect=…`; após o login a tela abre com o conteúdo. |
+| Tempo real | `POST /api/__simulate/nft-updated` levou o preço de 2,5 para 9,99 ETH no detalhe, sem refetch REST. |
+| Perfil e carteiras | `h1` "Perfil do colecionador" (9 campos) e "Carteira principal" renderizados com dados da sessão. |
+| Lighthouse (mediana de 3 por página) | `/`: 100 / 97 / 96 / 100; `/nfts/nft-001`: 99 / 100 / 96 / 100; `/login`: 99 / 100 / 96 / 100 (performance / acessibilidade / boas práticas / SEO). LCP 0,6–0,7 s, CLS 0, TBT ≤ 8 ms. Relatórios em `docs/lighthouse`. |
+
+Boas práticas fica em 96 por três pontos conhecidos: o `401` da checagem de sessão
+anônima (resposta correta do contrato, registrada no console do navegador), o alvo de
+toque de 16 px dos checkboxes de filtro e o `llms.txt` sem `H1` e sem links.
