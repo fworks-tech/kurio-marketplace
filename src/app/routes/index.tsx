@@ -86,7 +86,7 @@ function HomeRoute() {
   const requireAuth = () => openAuth('login')
 
   return (
-    <main className="flex flex-col gap-16 pt-8 pb-8 sm:gap-24">
+    <main className="flex flex-col gap-4 pt-8 pb-8 sm:gap-24">
       <MobileCatalogBar search={state.search} values={state} onChange={patch} />
       <HomeHero />
       <CatalogScreen

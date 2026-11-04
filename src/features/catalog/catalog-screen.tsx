@@ -120,9 +120,11 @@ export function CatalogScreen({
         />
 
         <div className="min-w-0 flex-1">
-          <div className="mb-8 flex flex-wrap items-start justify-between gap-4 lg:h-[18px]">
+          <div className="mb-4 flex flex-wrap items-start justify-between gap-4 lg:mb-8 lg:h-[18px]">
             <CatalogTabs value={state.tab} options={TABS} onChange={(tab) => onPatch({ tab, page: 1 })} />
+            {/* Mobile / Início draws only the tabs; ordering is a desktop control. */}
             <SortSelect
+              className="hidden lg:flex"
               value={state.sort}
               options={SORTS}
               onChange={(sort) => onPatch({ sort: sort as NftSort, tab: 'todos', page: 1 })}

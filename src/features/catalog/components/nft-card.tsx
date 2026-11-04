@@ -38,18 +38,20 @@ export function NftCard({
     'bg-ink/70 border-field text-canvas hover:text-highlight focus-visible:ring-highlight grid size-8 place-items-center rounded-full border backdrop-blur transition-colors focus-visible:ring-2 focus-visible:outline-none'
 
   return (
-    <article className={cn('kurio-card group flex flex-col', className)}>
+    <article className={cn('kurio-card group flex flex-col self-start', className)}>
       <div
         className={cn(
-          'bg-surface-card relative rounded-[14px]',
-          compact ? 'grid aspect-[219/255] place-items-center p-1' : 'aspect-[258/300] px-1 pt-[31px] pb-[19px]'
+          'bg-surface-card relative rounded-[20px] lg:rounded-[14px]',
+          compact
+            ? 'grid aspect-[219/255] place-items-center p-1'
+            : 'aspect-[175/200] px-1 pt-3 pb-5 lg:aspect-[258/300] lg:pt-[31px] lg:pb-[19px]'
         )}
       >
         <Link
           to="/nfts/$nftId"
           params={{ nftId: nft.id }}
           className={cn(
-            'relative block w-full overflow-hidden rounded-[15px] focus-visible:ring-highlight focus-visible:ring-2 focus-visible:outline-none',
+            'relative block w-full overflow-hidden rounded-[16px] focus-visible:ring-highlight focus-visible:ring-2 focus-visible:outline-none lg:rounded-[15px]',
             compact ? 'mx-auto max-w-[190px]' : 'mx-auto max-w-[250px]'
           )}
         >
@@ -69,6 +71,25 @@ export function NftCard({
               ))}
             </div>
           ) : null}
+          {onToggleFavorite ? (
+            <button
+              type="button"
+              aria-pressed={Boolean(nft.isFavorite)}
+              aria-label={
+                nft.isFavorite ? `Remover ${nft.title} dos favoritos` : `Favoritar ${nft.title}`
+              }
+              onClick={() => onToggleFavorite(nft.id)}
+              className="absolute top-3 right-3 grid size-7 place-items-center rounded-full bg-[#2F1D15] lg:hidden"
+            >
+              <HeartIcon
+                aria-hidden
+                className={cn(
+                  'size-[15px]',
+                  nft.isFavorite ? 'fill-highlight text-highlight' : 'text-highlight'
+                )}
+              />
+            </button>
+          ) : null}
           {soldOut ? (
             <div className="bg-ink/70 absolute inset-0 flex items-center justify-center">
               <span className="rounded-pill border border-white/30 px-3 py-1 text-sm font-semibold">
@@ -81,7 +102,7 @@ export function NftCard({
         {onToggleFavorite || onAddToCart ? (
           <div
             data-card-actions
-            className="pointer-events-none absolute inset-x-0 bottom-[19px] flex justify-center gap-2 opacity-0 transition-opacity duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 motion-reduce:transition-none [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100"
+            className="pointer-events-none absolute inset-x-0 bottom-[19px] hidden justify-center gap-2 lg:flex opacity-0 transition-opacity duration-200 group-hover:pointer-events-auto group-hover:opacity-100 group-focus-within:pointer-events-auto group-focus-within:opacity-100 motion-reduce:transition-none [@media(hover:none)]:pointer-events-auto [@media(hover:none)]:opacity-100"
           >
             {onAddToCart ? (
               <button
@@ -127,17 +148,17 @@ export function NftCard({
       <h3
         className={cn(
           'text-canvas truncate font-normal',
-          compact ? 'mt-2' : 'mt-3',
-          compact ? 'text-[15px] leading-4' : 'text-base leading-4'
+          compact ? 'mt-2' : 'mt-2 lg:mt-3',
+          compact ? 'text-[15px] leading-4' : 'text-[15px] leading-[19.8px] lg:text-base lg:leading-4'
         )}
       >
         {nft.title}
       </h3>
 
-      <div className="mt-3 flex items-center gap-3">
+      <div className="mt-0 flex items-center gap-3 lg:mt-3">
         <PriceDisplay
           value={nft.priceEth}
-          className={cn(compact ? 'text-base' : 'text-lg', 'text-price leading-4 font-bold')}
+          className={cn(compact ? 'text-base' : 'text-base lg:text-lg', 'text-price leading-4 font-bold')}
         />
         {nft.previousPriceEth ? (
           <span className="text-sand text-lg leading-4 line-through">

@@ -28,14 +28,14 @@ export function MobileTabBar({ active, className }: MobileTabBarProps) {
   const itemClass = (key: TabKey) =>
     cn(
       'flex flex-col items-center justify-center gap-0.5',
-      active === key ? 'text-primary' : 'text-text-secondary'
+      active === key ? 'text-highlight' : 'text-[#CFB28C]'
     )
 
   return (
     <nav
       aria-label="Navegação inferior"
       className={cn(
-        'border-border bg-ink/95 shadow-tab-up fixed inset-x-0 bottom-0 z-40 grid h-[95px] grid-cols-5 items-center border-t px-4 pt-6 pb-[calc(0.75rem+env(safe-area-inset-bottom))] backdrop-blur relative',
+        'shadow-tab-up fixed inset-x-0 bottom-0 z-40 grid h-[95px] grid-cols-5 items-center bg-[#241612] px-4 pt-6 pb-[calc(0.75rem+env(safe-area-inset-bottom))]',
         className
       )}
     >

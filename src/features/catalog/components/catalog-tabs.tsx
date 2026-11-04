@@ -13,7 +13,10 @@ interface CatalogTabsProps {
 export function CatalogTabs({ value, options, onChange, className }: CatalogTabsProps) {
   return (
     <Tabs value={value} onValueChange={onChange} className={cn(className)}>
-      <TabsList variant="line" className="h-auto flex-wrap gap-x-5 gap-y-2 bg-transparent p-0">
+      <TabsList
+        variant="line"
+        className="h-auto flex-nowrap gap-x-1 gap-y-0 bg-transparent p-0 lg:flex-wrap lg:gap-x-5 lg:gap-y-2 [&>*:last-child]:ml-3 lg:[&>*:last-child]:ml-0"
+      >
         {options.map((option) => {
           const active = value === option.value
           return (
@@ -21,8 +24,8 @@ export function CatalogTabs({ value, options, onChange, className }: CatalogTabs
               key={option.value}
               value={option.value}
               className={cn(
-                'text-canvas! relative h-4 gap-0 p-0 text-[15px] leading-4 font-medium whitespace-nowrap',
-                'data-[state=active]:text-highlight!'
+                'text-canvas! relative h-4 gap-0 p-0 text-sm leading-4 font-normal whitespace-nowrap',
+                'data-[state=active]:text-highlight! data-[state=active]:font-bold lg:text-[15px] lg:font-medium'
               )}
             >
               {option.label}

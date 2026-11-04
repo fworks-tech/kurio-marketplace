@@ -37,15 +37,15 @@ export function MobileCatalogBar({ search, values, onChange }: MobileCatalogBarP
             onChange={(next) => onChange({ search: next })}
             label="Buscar NFT"
             placeholder="Explorar coleções"
-            className="min-w-0 flex-1 [&_input]:h-[45px] [&_input]:rounded-[10px] [&_input]:border-transparent [&_input]:bg-surface-card"
+            className="min-w-0 flex-1 [&_input]:h-[45px] [&_input]:rounded-[10px] [&_input]:border-transparent [&_input]:bg-[#241612]! [&_input]:pl-[42px] [&_input]:text-sm [&_input]:leading-4 [&_input]:font-bold [&_input]:placeholder:font-bold [&_input]:placeholder:text-[#B39463] [&_input]:placeholder:opacity-100 [&_svg]:left-3 [&_svg]:size-[22px] [&_svg]:text-[#B39463]"
           />
           <SheetTrigger asChild>
             <Button
               variant="outline"
               aria-label="Filtros"
-              className="bg-surface-card size-[45px] shrink-0 rounded-[14px] border-transparent p-0"
+              className="bg-gradient-filter text-ink size-[45px] shrink-0 rounded-[14px] border-transparent bg-[#241612]! p-0"
             >
-              <SlidersHorizontalIcon aria-hidden className="size-[22px]" />
+              <SlidersHorizontalIcon aria-hidden className="size-[22px]" strokeWidth={1.5} />
             </Button>
           </SheetTrigger>
         </div>
