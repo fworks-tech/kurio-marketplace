@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react'
+import { Link } from '@tanstack/react-router'
+import { ChevronLeftIcon } from 'lucide-react'
 import { Breadcrumb } from '@/shared/ui/breadcrumb'
 import { EmptyState } from '@/shared/ui/empty-state'
 import { ErrorState } from '@/shared/ui/error-state'
@@ -82,10 +84,27 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
 
   return (
     <main className="mx-auto max-w-[1248px] px-7 py-8 sm:px-6">
-      <Breadcrumb items={[{ label: 'Início', to: '/' }, { label: 'Mercado', to: '/' }, { label: 'Carrinho' }]} />
+      <div className="hidden lg:block">
+        <Breadcrumb
+          items={[{ label: 'Início', to: '/' }, { label: 'Mercado', to: '/' }, { label: 'Carrinho' }]}
+        />
+      </div>
+      {/* Mobile / Carrinho: 44px screen header with the back control and a 20px title. */}
+      <div className="flex h-11 items-center gap-[61px] lg:hidden">
+        <Link
+          to="/"
+          aria-label="Voltar para o mercado"
+          className="text-canvas grid size-[35px] place-items-center rounded-full border border-white/10"
+        >
+          <ChevronLeftIcon aria-hidden className="size-5" />
+        </Link>
+        <span aria-hidden className="text-canvas text-xl leading-4 font-bold">
+          Carrinho de NFTs
+        </span>
+      </div>
       <h1 className="sr-only">Carrinho de NFTs</h1>
       {/* Figma `Cart Body`: 782px table, 86px gutter and a 332px wallet summary. */}
-      <div className="mt-3 grid gap-8 lg:grid-cols-[1fr_332px] lg:gap-[86px]">
+      <div className="mt-3 grid grid-cols-[minmax(0,1fr)] gap-8 lg:grid-cols-[1fr_332px] lg:gap-[86px]">
         <section aria-label="Itens do carrinho">
           {cart.isLoading ? (
             <div className="space-y-3">
@@ -111,7 +130,7 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
                 <span className="font-medium">Total</span>
                 <span className="w-7" aria-hidden />
               </div>
-              <div className="mt-3 space-y-3">
+              <div className="mt-3 space-y-5 lg:space-y-3">
               {items.map((item) => (
                 <CartItemRow
                   key={item.nftId}
@@ -131,9 +150,10 @@ export function CartScreen({ authenticated, onCheckout, onExplore }: CartScreenP
           )}
         </section>
 
-        <aside className="lg:sticky lg:top-24 lg:self-start">
-          <div>
-            <h2 className="text-canvas border-primary mb-6 border-b pb-3 text-lg leading-4 font-bold">
+        <aside className="min-w-0 lg:sticky lg:top-24 lg:self-start">
+          {/* Mobile draws the summary as a full-bleed #241612 band, 24px in and 36px at the bottom. */}
+          <div className="-mx-7 bg-surface-card px-6 pt-6 pb-9 lg:mx-0 lg:bg-transparent lg:p-0">
+            <h2 className="text-canvas border-primary mb-6 hidden border-b pb-3 text-lg leading-4 font-bold lg:block">
               Resumo da carteira
             </h2>
             <CouponField

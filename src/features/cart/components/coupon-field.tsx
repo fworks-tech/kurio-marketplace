@@ -36,7 +36,10 @@ export function CouponField({
 
   return (
     <div className={cn('space-y-2', className)}>
-      <label htmlFor={id} className="text-canvas block text-sm leading-4 font-bold">
+      <label
+        htmlFor={id}
+        className="text-canvas sr-only text-sm leading-4 font-bold lg:not-sr-only lg:block"
+      >
         Código promocional
       </label>
 
@@ -61,12 +64,12 @@ export function CouponField({
             aria-invalid={status === 'error' || undefined}
             aria-describedby={status === 'error' ? errorId : undefined}
             onChange={(event) => onChange(event.target.value)}
-            className="border-primary placeholder:text-sand placeholder:text-xs text-canvas h-10 pr-[102px] pl-2 text-xs"
+            className="border-primary placeholder:text-sand placeholder:text-xs text-canvas h-[50px] rounded-[40px] pr-[92px] pl-4 text-xs lg:h-10 lg:rounded-[3px] lg:pr-[102px] lg:pl-2"
           />
           <Button
             type="submit"
             onClick={onApply}
-            className="text-ink absolute top-0 right-0 h-10 w-[102px] rounded-r-[3px] rounded-l-none text-[15px] font-bold"
+            className="text-ink absolute top-0 right-0 h-[50px] w-[92px] rounded-[40px] text-[15px] font-bold lg:h-10 lg:w-[102px] lg:rounded-[3px]"
           >
             Aplicar
           </Button>
